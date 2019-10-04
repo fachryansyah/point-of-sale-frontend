@@ -42,7 +42,7 @@ class Dashboard extends Component {
         this.setState({
             isLoading: true
         })
-        await Http.get(`/product?page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
+        await Http.get(`/product?limit=8&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
         .then((res) => {
             this.setState({
                 products: res.data.data.results,
@@ -420,7 +420,7 @@ class Dashboard extends Component {
                 <div className="cartnav">
                     <div className="bg-white h-match-parent cart-fix shadow">
                         <div className="p-2 bg-red text-center">
-                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ this.state.carts.length }</span></h6>
+                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ this.state.carts.length > 0 ? this.state.carts.length : 0 }</span></h6>
                         </div>
                         <div className="pr-3 mt-3">
                             <ul className="list-group pr-2 pl-2 scrollview">

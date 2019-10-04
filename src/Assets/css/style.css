@@ -31,6 +31,11 @@
     background-color: #d93c34 !important;
 }
 
+.img-fluid-50{
+    max-width: 50%;
+    height: auto;
+}
+
 .nav-fix{
     position: fixed;
     width: 100%;
@@ -52,6 +57,13 @@
 .scrollview{
     overflow-y: scroll;
     height: 390px;
+}
+
+.list-group-item.active{
+    z-index: 2;
+    color: #fff !important;
+    background-color: #d93e34 !important;
+    border-color: #d93e34 !important;
 }
 
 .mt-90{
@@ -119,6 +131,12 @@
 }
 .custom-shadow-left{
     box-shadow: 6px 4px 18px 0px rgba(0,0,0,0.1) !important;
+}
+
+.custom-footer{
+    position: absolute;
+    bottom: 70px;
+    width: 100%;
 }
 
 .h-match-parent{

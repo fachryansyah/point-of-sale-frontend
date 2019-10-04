@@ -30,6 +30,9 @@ class Dashboard extends Component {
     }
 
     async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
+        this.setState({
+            isLoading: true
+        })
         await Http.get(`/product?page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
         .then((res) => {
             this.setState({
@@ -345,7 +348,7 @@ class Dashboard extends Component {
                                     this.state.carts.map((val, key) => {
                                         return(
                                             <li className="list-group-item no-border d-flex flex-row" key={key}>
-                                                <img src={"http://localhost:1337/images/" + val.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
+                                                <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
                                                 <div className="ml-2">
                                                     <h6>{ val.name }</h6>
                                                     <p><span className="badge badge-primary">{ val.qty }</span></p>

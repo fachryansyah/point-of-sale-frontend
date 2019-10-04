@@ -27,6 +27,9 @@ class ManageProduct extends Component {
     }
 
     async getDataProducts(page = 1){
+        this.setState({
+            isLoading: true
+        })
         await Http.get(`/product?page=${page}`)
         .then((res) => {
             this.setState({

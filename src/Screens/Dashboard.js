@@ -26,9 +26,7 @@ class Dashboard extends Component {
     }
 
     async componentDidMount(){
-        await setTimeout(() => {
-            this.getDataProducts()
-        }, 3000)
+        this.getDataProducts()
     }
 
     async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){

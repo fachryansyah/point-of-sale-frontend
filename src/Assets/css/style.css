@@ -77,6 +77,13 @@
     border-radius: 8px;
 }
 
+.shimmer-line-match-parent{
+    width: 100%;
+    height: 14px;
+    align-self: center;
+    margin-left: 16px;
+    border-radius: 8px;
+}
 .shimmer-line-long{
     width: 160px;
     height: 14px;

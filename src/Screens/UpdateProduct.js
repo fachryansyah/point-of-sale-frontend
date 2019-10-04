@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Http from '../Http'
 import { Redirect } from 'react-router-dom'
+import Shimmer from 'react-shimmer-effect'
 import { toast } from 'react-toastify'
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
@@ -18,7 +19,8 @@ class UpdateProduct extends Component {
             category_id: "",
             categories: [],
             errors: [],
-            isLoading: false,
+            isLoadingBtn: true,
+            isLoadingData: true,
         }
     }
 
@@ -35,10 +37,12 @@ class UpdateProduct extends Component {
                 id: res.data.data.id,
                 name: res.data.data.name,
                 description: res.data.data.description,
-                imagePreview: `http://localhost:1337/images/${res.data.data.image}`,
+                imagePreview: `${process.env.REACT_APP_BASE_URL}/images/${res.data.data.image}`,
                 qty: res.data.data.qty,
                 category_id: res.data.data.category_id,
-                price: res.data.data.price
+                price: res.data.data.price,
+                isLoadingData: false,
+                isLoadingBtn: false
             })
         })
         .catch((err) => {
@@ -108,7 +112,7 @@ class UpdateProduct extends Component {
                 console.log(res.data.errors)
                 this.setState({
                     errors: res.data.errors,
-                    isLoading: false
+                    isLoadingBtn: false
                 })
                 toast.error("Oops validation error, please check your fields", {
                     className: "bg-danger"
@@ -120,19 +124,171 @@ class UpdateProduct extends Component {
                     className: "bg-success"
                 })
                 this.setState({
-                    isLoading: false
+                    isLoadingBtn: false
                 })
             }
         })
         .catch((err) => {
             this.setState({
-                isLoading: false
+                isLoadingBtn: false
             })
             toast.error("Oops looks like something went wrong!", {
                 className: "bg-danger"
             })
             console.log(err)
         })
+    }
+
+    __renderFormUpdate(){
+        if (this.state.isLoadingData) {
+            return(
+                <div>
+                    <div className="row mt-3">
+                        <div className="col-md-6 form-group">
+                            <label>Name</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                        <div className="col-md-6 form-group">
+                            <label>Category</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-4 form-group">
+                            <label>Image</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                        <div className="col-md-4 form-group">
+                            <label>Price</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                        <div className="col-md-4 form-group">
+                            <label>Quantity</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                    </div>
+
+                    <div className="row">
+                        <div className="col-md-12 form-group">
+                            <label>Description</label>
+                            <br />
+                            <Shimmer>
+                                <div className="shimmer-line-match-parent"></div>
+                            </Shimmer>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+        return(
+            <div>
+                <div className="row mt-3">
+                    <div className="col-md-6 form-group">
+                        <label>Name</label>
+                        <input
+                            className={this.state.errors.find(error => error.param == "name") ? "form-control is-invalid" : "form-control"}
+                            name="name"
+                            type="text"
+                            value={this.state.name}
+                            onChange={(e) => this.handleChange(e)} placeholder="Product name here.."
+                        />
+                        {this.__renderNotifError("name")}
+                    </div>
+                    <div className="col-md-6 form-group">
+                        <label>Category</label>
+                        <select
+                            className="form-control"
+                            name="category_id"
+                            onChange={(e) => this.handleChange(e)}
+                            className={this.state.errors.find(error => error.param == "category_id") ? "form-control is-invalid" : "form-control"}
+                        >
+                            <option value="">--Select--</option>
+                            {
+                                this.state.categories.map((val, key) => {
+                                    return(
+                                        <option
+                                            value={val.id}
+                                            key={key}
+                                            selected={this.state.category_id == val.id ? true : false}
+                                        >
+                                            {val.name}
+                                        </option>
+                                    )
+                                })
+                            }
+                        </select>
+                        {this.__renderNotifError("category_id")}
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-md-4 form-group">
+                        <label>Image</label>
+                        <input
+                            className={this.state.errors.find(error => error.param == "image") ? "form-control is-invalid" : "form-control"}
+                            name="image"
+                            onChange={(e) => this.handleImage(e)}
+                            type="file"
+                        />
+                        {this.__renderNotifError("image")}
+                    </div>
+                    <div className="col-md-4 form-group">
+                        <label>Price</label>
+                        <input
+                            className={this.state.errors.find(error => error.param == "price") ? "form-control is-invalid" : "form-control"}
+                            name="price"
+                            onChange={(e) => this.handleChange(e)}
+                            type="number"
+                            value={this.state.price}
+                            placeholder="100000"
+                        />
+                        {this.__renderNotifError("price")}
+                    </div>
+                    <div className="col-md-4 form-group">
+                        <label>Quantity</label>
+                        <input
+                            className={this.state.errors.find(error => error.param == "qty") ? "form-control is-invalid" : "form-control"}
+                            name="qty"
+                            onChange={(e) => this.handleChange(e)}
+                            type="number"
+                            value={this.state.qty}
+                            placeholder="1"
+                        />
+                        {this.__renderNotifError("qty")}
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-md-12 form-group">
+                        <label>Description</label>
+                        <textarea
+                            className={this.state.errors.find(error => error.param == "description") ? "form-control is-invalid" : "form-control"}
+                            name="description"
+                            value={this.state.description}
+                            onChange={(e) => this.handleChange(e)} rows="3"
+                            placeholder="Product description here.."
+                        />
+                        {this.__renderNotifError("description")}
+                    </div>
+                </div>
+            </div>
+        )
     }
 
     __renderNotifError(param){
@@ -147,7 +303,7 @@ class UpdateProduct extends Component {
     }
 
     __renderBtnSave(){
-        if (this.state.isLoading) {
+        if (this.state.isLoadingBtn) {
             return <div class="lds-ripple"><div></div><div></div></div>
         }else{
             return (
@@ -155,7 +311,7 @@ class UpdateProduct extends Component {
                     className="btn btn-danger"
                     onClick={async () => {
                         this.setState({
-                            isLoading: true
+                            isLoadingBtn: true
                         })
                         await setTimeout(() => {
                             this.updateProduct()
@@ -188,95 +344,8 @@ class UpdateProduct extends Component {
                                     </div>
                                 </div>
 
-                                <div className="row mt-3">
-                                    <div className="col-md-6 form-group">
-                                        <label>Name</label>
-                                        <input
-                                            className={this.state.errors.find(error => error.param == "name") ? "form-control is-invalid" : "form-control"}
-                                            name="name"
-                                            type="text"
-                                            value={this.state.name}
-                                            onChange={(e) => this.handleChange(e)} placeholder="Product name here.."
-                                        />
-                                        {this.__renderNotifError("name")}
-                                    </div>
-                                    <div className="col-md-6 form-group">
-                                        <label>Category</label>
-                                        <select
-                                            className="form-control"
-                                            name="category_id"
-                                            onChange={(e) => this.handleChange(e)}
-                                            className={this.state.errors.find(error => error.param == "category_id") ? "form-control is-invalid" : "form-control"}
-                                        >
-                                            <option value="">--Select--</option>
-                                            {
-                                                this.state.categories.map((val, key) => {
-                                                    return(
-                                                        <option
-                                                            value={val.id}
-                                                            key={key}
-                                                            selected={this.state.category_id == val.id ? true : false}
-                                                        >
-                                                            {val.name}
-                                                        </option>
-                                                    )
-                                                })
-                                            }
-                                        </select>
-                                        {this.__renderNotifError("category_id")}
-                                    </div>
-                                </div>
+                                {this.__renderFormUpdate()}
 
-                                <div className="row">
-                                    <div className="col-md-4 form-group">
-                                        <label>Image</label>
-                                        <input
-                                            className={this.state.errors.find(error => error.param == "image") ? "form-control is-invalid" : "form-control"}
-                                            name="image"
-                                            onChange={(e) => this.handleImage(e)}
-                                            type="file"
-                                        />
-                                        {this.__renderNotifError("image")}
-                                    </div>
-                                    <div className="col-md-4 form-group">
-                                        <label>Price</label>
-                                        <input
-                                            className={this.state.errors.find(error => error.param == "price") ? "form-control is-invalid" : "form-control"}
-                                            name="price"
-                                            onChange={(e) => this.handleChange(e)}
-                                            type="number"
-                                            value={this.state.price}
-                                            placeholder="100000"
-                                        />
-                                        {this.__renderNotifError("price")}
-                                    </div>
-                                    <div className="col-md-4 form-group">
-                                        <label>Quantity</label>
-                                        <input
-                                            className={this.state.errors.find(error => error.param == "qty") ? "form-control is-invalid" : "form-control"}
-                                            name="qty"
-                                            onChange={(e) => this.handleChange(e)}
-                                            type="number"
-                                            value={this.state.qty}
-                                            placeholder="1"
-                                        />
-                                        {this.__renderNotifError("qty")}
-                                    </div>
-                                </div>
-
-                                <div className="row">
-                                    <div className="col-md-12 form-group">
-                                        <label>Description</label>
-                                        <textarea
-                                            className={this.state.errors.find(error => error.param == "description") ? "form-control is-invalid" : "form-control"}
-                                            name="description"
-                                            value={this.state.description}
-                                            onChange={(e) => this.handleChange(e)} rows="3"
-                                            placeholder="Product description here.."
-                                        />
-                                        {this.__renderNotifError("description")}
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>

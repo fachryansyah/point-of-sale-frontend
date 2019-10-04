@@ -141,7 +141,7 @@ class ManageProduct extends Component {
                         <th scope="row">{ key+1 }</th>
                         <td>{ val.name }</td>
                         <td>
-                            <img className="img-table" src={`http://localhost:1337/images/${val.image}`} />
+                            <img className="img-table" src={`${process.env.REACT_APP_BASE_URL}/images/${val.image}`} />
                         </td>
                         <td>{ val.category }</td>
                         <td>

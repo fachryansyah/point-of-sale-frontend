@@ -27,6 +27,7 @@ class Dashboard extends Component {
                 order_items: []
             },
             isLoading: true,
+            isLoadingCheckout: false
         }
     }
 
@@ -161,6 +162,17 @@ class Dashboard extends Component {
     }
 
     async checkoutProduct(){
+
+        if (this.state.carts.length < 1) {
+            return toast.error("No product in cart", {
+                className: 'bg-danger'
+            })
+        }
+
+        this.setState({
+            isLoadingCheckout: true
+        })
+
         await Http.post('/order', JSON.stringify({items: this.state.carts}), {
             headers: {
                 'Content-Type': 'application/json',
@@ -170,8 +182,10 @@ class Dashboard extends Component {
             console.log(res.data)
             if (res.data.status == 200) {
                 this.setState({
-                    checkout: res.data.data
+                    checkout: res.data.data,
+                    isLoadingCheckout: false
                 })
+                this.cancelCheckout()
                 $("#modalCheckout").modal("show")
             }
         })
@@ -228,7 +242,10 @@ class Dashboard extends Component {
                             <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} className="img-product" alt="Product Image" />
                             <div className="card-body custom-card-body">
                                 <h5 className="card-title">{ val.name }</h5>
-                                <h5><span className="badge badge-danger">{ Rupiah.convert(val.price) }</span></h5>
+                                <h5>
+                                    <span className="badge badge-danger">{ Rupiah.convert(val.price) }</span>&nbsp;
+                                    <span className="badge badge-info">{ val.qty }</span>
+                                </h5>
                                 <button className="btn btn-danger btn-sm btn-block mt-3" onClick={() => this.addToCart(val)} disabled={this.checkProductInCart(val.id) ? true : false}>
                                     <i className={ this.checkProductInCart(val.id) ? 'fa fa-check mr-2' : 'fa fa-cart-plus mr-2' }></i>
                                     { this.checkProductInCart(val.id) ? 'Added to cart' : 'Add to cart' }
@@ -296,6 +313,14 @@ class Dashboard extends Component {
             })
         }
         return element
+    }
+
+    __renderBtnCheckout(){
+        if (this.state.isLoadingCheckout) {
+            return(<div class="lds-ripple"><div></div><div></div></div>)
+        }else{
+            return(<button className="btn btn-success btn-sm btn-block" onClick={() => this.checkoutProduct()}>Checkout</button>)
+        }
     }
 
     __renderTotalCart(){
@@ -420,7 +445,7 @@ class Dashboard extends Component {
                 <div className="cartnav">
                     <div className="bg-white h-match-parent cart-fix shadow">
                         <div className="p-2 bg-red text-center">
-                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ this.state.carts.length > 0 ? this.state.carts.length : 0 }</span></h6>
+                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ this.state.carts.length }</span></h6>
                         </div>
                         <div className="pr-3 mt-3">
                             <ul className="list-group pr-2 pl-2 scrollview">
@@ -438,7 +463,7 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <div className="col-md-6 ml-auto">
-                                    <button className="btn btn-success btn-sm btn-block" onClick={() => this.checkoutProduct()}>Checkout</button>
+                                    {this.__renderBtnCheckout()}
                                 </div>
                                 <div className="col-md-6">
                                     <button className="btn btn-danger btn-sm btn-block" onClick={() => this.cancelCheckout()}>Cancel</button>

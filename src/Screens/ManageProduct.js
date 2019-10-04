@@ -18,7 +18,8 @@ class ManageProduct extends Component {
             modalId: "deleteProduct",
             currentPage: 1,
             totalPage: 0,
-            isLoading: true
+            isLoading: true,
+            isLoadingBtn: false
         }
     }
 
@@ -55,12 +56,17 @@ class ManageProduct extends Component {
     }
 
     deleteProduct(){
+
+        this.setState({
+            isLoadingBtn: true
+        })
+
         Http.delete(`/product/${this.state.deleteProductId}`)
         .then((res) => {
             console.log(res.data)
             if (res.data.status == 200) {
                 this.setState({
-                    isLoading: false,
+                    isLoadingBtn: false,
                     isDone: true
                 })
                 $(`#${this.state.modalId}`).modal('hide')
@@ -72,7 +78,7 @@ class ManageProduct extends Component {
 
             if (res.data.status == 500) {
                 this.setState({
-                    isLoading: false
+                    isLoadingBtn: false
                 })
                 $(`#${this.props.modalId}`).modal('hide')
                 toast.error("Oops looks like something went wrong", {
@@ -83,7 +89,7 @@ class ManageProduct extends Component {
         .catch((err) => {
             console.log(err.message)
             this.setState({
-                isLoading: false
+                isLoadingBtn: false
             })
             $(`#${this.props.modalId}`).modal('hide')
             toast.error("Oops looks like something went wrong", {
@@ -206,20 +212,13 @@ class ManageProduct extends Component {
     }
 
     __renderBtnDelete(){
-        if (this.state.isLoading) {
+        if (this.state.isLoadingBtn) {
             return (<div className="lds-ripple-white"><div></div><div></div></div>)
         }else{
             return (
                 <button
                     className="btn btn-white"
-                    onClick={ async () => {
-                        this.setState({
-                            isLoading: true,
-                        })
-                        setTimeout(() => {
-                            this.deleteProduct()
-                        }, 3000)
-                    }}>
+                    onClick={() => this.deleteProduct()}>
                         Ok, Got it
                 </button>
             )

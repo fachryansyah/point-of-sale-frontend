@@ -18,6 +18,8 @@ class AddProduct extends Component {
             qty: "",
             errors: [],
             categories: [],
+            isLoading: false,
+            isLoadingData: true,
             toDashboard: false
         }
     }
@@ -30,7 +32,8 @@ class AddProduct extends Component {
         Http.get("/category")
         .then((res) => {
             this.setState({
-                categories: res.data.data
+                categories: res.data.data,
+                isLoadingData: false
             })
         })
         .catch((err) => {
@@ -58,8 +61,12 @@ class AddProduct extends Component {
     createProduct(){
         const {name, description, category_id, image, imagePreview, price, qty} = this.state
 
+        this.setState({
+            isLoading: true
+        })
+
         const formData = new FormData()
-        
+
         // check value is set
         if (name.length > 0) {
             formData.append("name", name)
@@ -88,7 +95,7 @@ class AddProduct extends Component {
             console.log(res)
             if (res.data.status == 304) {
                 console.log(res.data.errors)
-                this.setState({ errors: res.data.errors })
+                this.setState({ errors: res.data.errors, isLoading: false })
                 toast.error("Oops validation error, please check your fields", {
                     className: "bg-danger"
                 })
@@ -99,11 +106,15 @@ class AddProduct extends Component {
                     className: "bg-success"
                 })
                 this.setState({
-                    toDashboard: true
+                    toDashboard: true,
+                    isLoading: false
                 })
             }
         })
         .catch((err) => {
+            this.setState({
+                isLoading: false
+            })
             toast.error("Oops looks like something went wrong!", {
                 className: "bg-danger"
             })
@@ -119,6 +130,14 @@ class AddProduct extends Component {
                     <small className="text-danger">{error.msg}</small>
                 )
             }
+        }
+    }
+
+    __renderBtnSave(){
+        if (this.state.isLoading) {
+            return (<div class="lds-ripple"><div></div><div></div></div>)
+        }else{
+            return (<button className="btn btn-danger" onClick={() => this.createProduct()}>Save</button>)
         }
     }
 
@@ -143,7 +162,7 @@ class AddProduct extends Component {
                                         <h5 className="card-title font-weight-bold">Add New Product</h5>
                                     </div>
                                     <div className="ml-auto">
-                                        <button className="btn btn-danger" onClick={() => this.createProduct()}>Save</button>
+                                        {this.__renderBtnSave()}
                                     </div>
                                 </div>
 

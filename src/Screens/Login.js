@@ -25,7 +25,9 @@ class Login extends Component {
     }
 
     async loginUser(){
-
+        this.setState({
+            isLoading: true
+        })
         await Http.post('/auth/login', {
             email: this.state.email,
             password: this.state.password,
@@ -60,14 +62,7 @@ class Login extends Component {
             return(
                 <button
                     className="btn btn-danger my-4"
-                    onClick={ async () => {
-                        this.setState({
-                            isLoading: true
-                        })
-                        await setTimeout(() => {
-                            this.loginUser()
-                        }, 2000)
-                    }}>
+                    onClick={() => this.loginUser()}>
                     Sign in
                 </button>
             )

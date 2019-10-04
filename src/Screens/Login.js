@@ -76,7 +76,8 @@ class Login extends Component {
 
     render(){
         if (this.state.isLoggedIn) {
-            return (<Redirect to="#/" />)
+            return window.location.reload();
+            // return (<Redirect to="#/" />)
         }
         return(
             <div>

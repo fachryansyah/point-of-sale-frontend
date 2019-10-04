@@ -33,7 +33,7 @@ class Login extends Component {
         .then((res) => {
             console.log(res.data.status)
             if (res.data.status == 200) {
-                window.location.reload()
+                window.location.replace("/")
                 localStorage.setItem("apiToken", res.data.data.apiKey)
             }
             if (res.data.status == 500) {

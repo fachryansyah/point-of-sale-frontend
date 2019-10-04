@@ -67,6 +67,15 @@ class UpdateProduct extends Component {
         })
     }
 
+    handleImage(e){
+        if (typeof e.target.files[0] != "undefined") {
+            this.setState({
+                imagePreview: URL.createObjectURL(e.target.files[0]),
+                image: e.target.files[0]
+            })
+        }
+    }
+
     async updateProduct(){
         const {name, description, category_id, image, imagePreview, price, qty} = this.state
 

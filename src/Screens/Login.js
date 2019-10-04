@@ -55,7 +55,7 @@ class Login extends Component {
 
     __renderBtnSign(){
         if (this.state.isLoading) {
-            return(<div class="lds-ripple"><div></div><div></div></div>)
+            return(<div className="lds-ripple"><div></div><div></div></div>)
         }else{
             return(
                 <button

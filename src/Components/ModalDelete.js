@@ -9,7 +9,7 @@ class ModalDelete extends Component {
     constructor(){
         super()
         this.state = {
-            isLoading: false,
+            isLoadingBtn: false,
             isDone: false
         }
     }
@@ -20,7 +20,7 @@ class ModalDelete extends Component {
             console.log(res.data)
             if (res.data.status == 200) {
                 this.setState({
-                    isLoading: false,
+                    isLoadingBtn: false,
                     isDone: true
                 })
                 $(`#${this.props.modalId}`).modal('hide')
@@ -31,7 +31,7 @@ class ModalDelete extends Component {
 
             if (res.data.status == 500) {
                 this.setState({
-                    isLoading: false
+                    isLoadingBtn: false
                 })
                 $(`#${this.props.modalId}`).modal('hide')
                 toast.error("Oops looks like something went wrong", {
@@ -42,7 +42,7 @@ class ModalDelete extends Component {
         .catch((err) => {
             console.log(err.message)
             this.setState({
-                isLoading: false
+                isLoadingBtn: false
             })
             $(`#${this.props.modalId}`).modal('hide')
             toast.error("Oops looks like something went wrong", {
@@ -52,7 +52,7 @@ class ModalDelete extends Component {
     }
 
     __renderBtnDelete(){
-        if (this.state.isLoading) {
+        if (this.state.isLoadingBtn) {
             return <div class="lds-ripple-white"><div></div><div></div></div>
         }else{
             return (
@@ -60,7 +60,7 @@ class ModalDelete extends Component {
                     class="btn btn-white"
                     onClick={ async () => {
                         this.setState({
-                            isLoading: true,
+                            isLoadingBtn: true,
                         })
                         setTimeout(() => {
                             this.deleteProduct()

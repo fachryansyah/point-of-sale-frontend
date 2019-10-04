@@ -1,7 +1,7 @@
 import Axios from 'axios'
 
 const axiosInstance = Axios.create({
-    baseURL: 'http://localhost:1337/api/v1'
+    baseURL: `${process.env.REACT_APP_BASE_URL}/api/v1`
 })
 
 const token = localStorage.getItem("apiToken")

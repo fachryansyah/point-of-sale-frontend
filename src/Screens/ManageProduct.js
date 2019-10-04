@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Rupiah from 'rupiah-format'
+import Shimmer from 'react-shimmer-effect'
 import $ from 'jquery'
 import Http from '../Http'
 import Navbar from '../Components/Navbar'
@@ -17,6 +18,7 @@ class ManageProduct extends Component {
             modalId: "deleteProduct",
             currentPage: 1,
             totalPage: 0,
+            isLoading: true
         }
     }
 
@@ -30,8 +32,10 @@ class ManageProduct extends Component {
             this.setState({
                 products: res.data.data.results,
                 currentPage: res.data.data.currentPage,
-                totalPage: res.data.data.totalPage,currentPage: res.data.data.currentPage,
                 totalPage: res.data.data.totalPage,
+                currentPage: res.data.data.currentPage,
+                totalPage: res.data.data.totalPage,
+                isLoading: false
             })
             console.log(this.state.products)
         })
@@ -88,33 +92,77 @@ class ManageProduct extends Component {
     __renderProductList(){
         let element = []
 
-        this.state.products.map((val, key) => {
-            element.push(
-                <tr key={key}>
-                    <th scope="row">{ key+1 }</th>
-                    <td>{ val.name }</td>
-                    <td>
-                        <img className="img-table" src={`http://localhost:1337/images/${val.image}`} />
-                    </td>
-                    <td>{ val.category }</td>
-                    <td>
-                        <h5><small className="badge badge-danger">{ Rupiah.convert(val.price) }</small></h5>
-                    </td>
-                    <td>{ val.qty }</td>
-                    <td>
-                        <div className="btn-group">
-                            <button type="button" className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
-                            <div className="dropdown-menu">
-                                <Link to={`/update/${val.id}`} className="dropdown-item" href="#">Update</Link>
-                                <button className="dropdown-item" onClick={() => this.showModalDelete(val.id)}>Delete</button>
-                                <div className="dropdown-divider"></div>
-                                <a className="dropdown-item" href="#">Add Quantity</a>
+        if (this.state.isLoading) {
+            for(let i = 0; i < 5;i++){
+                element.push(
+                    <tr key={i}>
+                        <th scope="row">
+                            <Shimmer>
+                                <div className="shimmer-line-table-short"></div>
+                            </Shimmer>
+                        </th>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                        <td>
+                            <Shimmer>
+                                <div className="shimmer-line-table-long"></div>
+                            </Shimmer>
+                        </td>
+                    </tr>
+                )
+            }
+        }else{
+            this.state.products.map((val, key) => {
+                element.push(
+                    <tr key={key}>
+                        <th scope="row">{ key+1 }</th>
+                        <td>{ val.name }</td>
+                        <td>
+                            <img className="img-table" src={`http://localhost:1337/images/${val.image}`} />
+                        </td>
+                        <td>{ val.category }</td>
+                        <td>
+                            <h5><small className="badge badge-danger">{ Rupiah.convert(val.price) }</small></h5>
+                        </td>
+                        <td>{ val.qty }</td>
+                        <td>
+                            <div className="btn-group">
+                                <button type="button" className="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</button>
+                                <div className="dropdown-menu">
+                                    <Link to={`/update/${val.id}`} className="dropdown-item" href="#">Update</Link>
+                                    <button className="dropdown-item" onClick={() => this.showModalDelete(val.id)}>Delete</button>
+                                    <div className="dropdown-divider"></div>
+                                    <a className="dropdown-item" href="#">Add Quantity</a>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                </tr>
-            )
-        })
+                        </td>
+                    </tr>
+                )
+            })
+        }
 
         return element
     }

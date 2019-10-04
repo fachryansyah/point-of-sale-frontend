@@ -191,7 +191,7 @@ class Dashboard extends Component {
                 element.push(
                     <div className="col-md-3 mt-5" key={val.id}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
-                            <img src={"http://localhost:1337/images/" + val.image} className="img-product" alt="Product Image" />
+                            <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} className="img-product" alt="Product Image" />
                             <div className="card-body custom-card-body">
                                 <h5 className="card-title">{ val.name }</h5>
                                 <h5><span className="badge badge-danger">{ Rupiah.convert(val.price) }</span></h5>

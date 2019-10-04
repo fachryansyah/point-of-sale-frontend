@@ -1,0 +1,47 @@
+import React, { Component } from 'react'
+
+class ModalCheckout extends Component {
+    render(){
+        return(
+            <div className="modal fade" id={this.props.modalId} tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title" id="exampleModalLabel">Checkout</h5>
+                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">
+                      <ul className="list-group">
+                          {
+                              this.props.carts.map((val, key) => {
+                                  return(
+                                      <li className="list-group-item" key={key}>
+                                        <div className="d-flex flex-row">
+                                            <div className="mr-auto">
+                                                { val.name } <b>x{ val.qty }</b>
+                                            </div>
+                                            <div className="ml-auto">
+                                                { val.price }
+                                            </div>
+                                        </div>
+                                      </li>
+                                  )
+                              })
+                          }
+                      </ul>
+                  </div>
+                  <div className="modal-footer justify-content-center">
+                    <button type="button" className="btn btn-success" data-dismiss="modal">Print</button>
+                    <b>OR</b>
+                    <button type="button" className="btn btn-primary">Send Email</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+        )
+    }
+}
+
+export default ModalCheckout

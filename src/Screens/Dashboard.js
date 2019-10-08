@@ -43,7 +43,7 @@ class Dashboard extends Component {
         this.setState({
             isLoading: true
         })
-        await Http.get(`/product?limit=8&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
+        await Http.get(`/product?limit=4&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
         .then((res) => {
             this.setState({
                 products: res.data.data.results,
@@ -406,7 +406,6 @@ class Dashboard extends Component {
                                     </button>
                                     <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "price", "asc")}>Cheapest</button>
                                     <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "price", "desc")}>Expensive</button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "button", this.state.sortMode)}>Category</button>
                                     <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "created_at", "desc")}>Latest</button>
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "created_at", "desc")}>Reset</a>

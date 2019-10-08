@@ -65,7 +65,7 @@ class App extends Component {
             <div className="bg-deep-white">
                 <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
                 <Router>
-                    <Redirect to="/#" />
+                    <Redirect to="/" />
                     <Route path={'/'} exact component={Dashboard}></Route>
                     <Route path={'/add'} exact component={AddProduct}></Route>
                     <Route path={'/update/:id'} exact component={UpdateProduct}></Route>

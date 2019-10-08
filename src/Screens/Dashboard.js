@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { toast } from 'react-toastify'
 import { connect } from 'react-redux'
-import { getProduct } from '../Redux/Actions/Product'
+import { fetchProduct } from '../Redux/Actions/Product'
 import $ from 'jquery'
 import Shimmer from 'react-shimmer-effect'
 import Rupiah from 'rupiah-format'
 import Http from '../Http'
 import 'react-toastify/dist/ReactToastify.css'
 // import Navbar from '../Components/Navbar'
+import Pagination from '../Components/Pagination'
 import Sidebar from '../Components/Sidebar'
 import ModalCheckout from '../Components/ModalCheckout'
 
@@ -21,8 +22,6 @@ class Dashboard extends Component {
             sortBy: "created_at",
             sortMode: "desc",
             searchName: "",
-            currentPage: 1,
-            totalPage: 0,
             checkout: {
                 receiptNo: "",
                 totalOrderPrice: 0,
@@ -34,8 +33,7 @@ class Dashboard extends Component {
     }
 
     async componentDidMount(){
-        // this.getDataProducts()
-        this.getProduct()
+        this.getDataProducts()
 
         let cartsFromLocal = await JSON.parse(localStorage.getItem("carts"))
 
@@ -48,36 +46,53 @@ class Dashboard extends Component {
         console.log(this.state.carts)
     }
 
-    async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
-        this.setState({
-            isLoading: true
-        })
-        await Http.get(`/product?limit=4&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
-        .then((res) => {
+    async componentDidUpdate(prevProps, prevState){
+        if (prevProps.data.isLoading !== this.props.data.isLoading) {
             this.setState({
-                products: res.data.data.results,
-                sortBy: sortBy,
-                sortMode: sortMode,
-                searchName: searchName,
-                currentPage: res.data.data.currentPage,
-                totalPage: res.data.data.totalPage,
-                isLoading: false
+                isLoading: this.props.data.isLoading
             })
-        })
-        .catch((err) => {
+        }
+        if (prevProps.data.productList !== this.props.data.productList) {
             this.setState({
-                isLoading: false
+                products: this.props.data.productList.results,
+                isLoading: this.props.data.productList.isLoading
             })
-            console.log(err.message)
-        })
+        }
     }
 
-    async getProduct(){
-        await this.props.dispatch(getProduct())
-        console.log(this.props.data.productList)
+    // async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
+    //     this.setState({
+    //         isLoading: true
+    //     })
+    //     await Http.get(`/product?limit=4&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
+    //     .then((res) => {
+    //         this.setState({
+    //             products: res.data.data.results,
+    //             sortBy: sortBy,
+    //             sortMode: sortMode,
+    //             searchName: searchName,
+    //             currentPage: res.data.data.currentPage,
+    //             totalPage: res.data.data.totalPage,
+    //             isLoading: false
+    //         })
+    //     })
+    //     .catch((err) => {
+    //         this.setState({
+    //             isLoading: false
+    //         })
+    //         console.log(err.message)
+    //     })
+    // }
+
+    async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
+        await this.props.dispatch(fetchProduct(page, sortBy, sortMode, searchName))
         this.setState({
-            products: this.props.data.productList,
-            isLoading: false
+            currentPage: this.props.data.productList.currentPage,
+            totalPage: this.props.data.productList.totalPage,
+            sortBy: sortBy,
+            sortMode: sortMode,
+            searchName: searchName,
+            isLoading: this.props.data.productList.isLoading
         })
     }
 
@@ -232,8 +247,8 @@ class Dashboard extends Component {
 
     __renderProductList(){
         let element = []
-        if (this.state.isLoading) {
-            for (var i = 0; i < 8; i++) {
+        if (this.props.data.isLoading) {
+            for (var i = 0; i < 4; i++) {
                 element.push(
                     <div className="col-md-3 mt-5" key={i}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
@@ -253,7 +268,7 @@ class Dashboard extends Component {
                 )
             }
         }else{
-            this.state.products.results.map((val, key) => {
+            this.props.data.productList.results.map((val, key) => {
                 element.push(
                     <div className="col-md-3 mt-5" key={val.id}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
@@ -275,26 +290,6 @@ class Dashboard extends Component {
             })
         }
 
-        return element
-    }
-
-    __renderPagination(){
-        let element = []
-        for (let i = 1; i < this.state.totalPage+1; i++) {
-            element.push(
-                <li key={i} className={i == this.state.currentPage ? "page-item active" : "page-item"}>
-                    <button className={i == this.state.currentPage ? "page-link bg-danger no-border" : "page-link"}
-                    onClick={() => this.getDataProducts(
-                        i,
-                        this.state.sortBy,
-                        this.state.sortMode,
-                        this.state.searchName
-                    )}>
-                        {i}
-                    </button>
-                </li>
-            )
-        }
         return element
     }
 
@@ -394,11 +389,11 @@ class Dashboard extends Component {
                                 <div className="d-flex flex-row mr-3">
                                     <div className="custom-control custom-radio mt-2 mr-2">
                                         <input name="custom-radio-1" className="custom-control-input" id="radioAsc" type="radio"
-                                            value={this.state.sortMode}
-                                            checked={this.state.sortMode == "asc" ? true : false}
+                                            value={this.props.data.sortMode}
+                                            checked={this.props.data.sortMode == "asc" ? true : false}
                                             onChange={() => this.getDataProducts(
-                                                this.state.currentPage,
-                                                this.state.sortBy,
+                                                this.props.data.currentPage,
+                                                this.props.data.sortBy,
                                                 "asc"
                                             )}
                                         />
@@ -406,11 +401,11 @@ class Dashboard extends Component {
                                     </div>
                                     <div className="custom-control custom-radio mt-2">
                                         <input name="custom-radio-1" className="custom-control-input" id="radioDesc" type="radio"
-                                            value={this.state.sortMode}
-                                            checked={this.state.sortMode == "desc" ? true : false}
+                                            value={this.props.data.sortMode}
+                                            checked={this.props.data.sortMode == "desc" ? true : false}
                                             onChange={() => this.getDataProducts(
-                                                this.state.currentPage,
-                                                this.state.sortBy,
+                                                this.props.data.currentPage,
+                                                this.props.data.sortBy,
                                                 "desc"
                                             )}
                                          />
@@ -418,15 +413,15 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <button type="button" className="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Sort by {this.state.sortBy == "created_at" ? "Latest" : this.state.sortBy}
+                                    Sort by {this.props.data.sortBy == "created_at" ? "Latest" : this.props.data.sortBy}
                                 </button>
                                 <div className="dropdown-menu">
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "name", this.state.sortMode)}>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "name", this.props.data.sortMode)}>
                                         Name
                                     </button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "price", "asc")}>Cheapest</button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "price", "desc")}>Expensive</button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "created_at", "desc")}>Latest</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "price", "asc")}>Cheapest</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "price", "desc")}>Expensive</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "created_at", "desc")}>Latest</button>
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "created_at", "desc")}>Reset</a>
                                 </div>
@@ -438,24 +433,7 @@ class Dashboard extends Component {
                         </div>
 
                         <div className="nav justify-content-center mt-5">
-                            <nav>
-                                <ul className="pagination">
-                                    <li className={ this.state.currentPage === 1 ? "page-item disabled" : "page-item" }>
-                                        <button className="page-link" onClick={ () => this.getDataProducts(this.state.currentPage - 1)}>
-                                            <i className="fa fa-angle-left"></i>
-                                            <span className="sr-only">Previous</span>
-                                        </button>
-                                    </li>
-                                    {this.__renderPagination()}
-                                    <li className={ this.state.currentPage === this.state.totalPage ? "page-item disabled" : "page-item" }>
-                                        <button className="page-link"
-                                            onClick={ () => this.getDataProducts(this.state.currentPage + 1) }>
-                                            <i className="fa fa-angle-right"></i>
-                                            <span className="sr-only">Next</span>
-                                        </button>
-                                    </li>
-                                </ul>
-                            </nav>
+                            <Pagination />
                         </div>
 
                     </div>
@@ -496,7 +474,7 @@ class Dashboard extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
         data: state.productList
     }

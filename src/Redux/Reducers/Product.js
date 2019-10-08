@@ -1,6 +1,9 @@
 const initialState = {
     productList: [],
-    isLoading: false,
+    isLoading: true,
+    sortBy: "created_at",
+    sortMode: "desc",
+    searchName: "",
     isFulfilled: false,
     isRejected: false,
 }
@@ -27,7 +30,10 @@ const productList = (state = initialState, action) => {
                 isLoading: false,
                 isFulfilled: true,
                 isRejected: false,
-                productList: action.payload.data.data
+                sortBy: action.payload.sortBy,
+                sortMode: action.payload.sortMode,
+                searchName: action.payload.searchName,
+                productList: action.payload.res.data.data
             }
         default:
             return state

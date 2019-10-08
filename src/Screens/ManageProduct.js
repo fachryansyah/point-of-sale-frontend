@@ -1,49 +1,29 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import { connect } from 'react-redux'
+import { fetchProduct, pushProduct } from '../Redux/Actions/Product'
 import Rupiah from 'rupiah-format'
 import Shimmer from 'react-shimmer-effect'
 import $ from 'jquery'
 import Http from '../Http'
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
+import Pagination from '../Components/Pagination'
 // import ModalDelete from '../Components/ModalDelete'
 
 class ManageProduct extends Component {
     constructor(){
         super()
         this.state = {
-            products: [],
             deleteProductId: '',
             modalId: "deleteProduct",
-            currentPage: 1,
-            totalPage: 0,
-            isLoading: true,
             isLoadingBtn: false
         }
     }
 
-    componentDidMount(){
-        this.getDataProducts()
-    }
-
-    async getDataProducts(page = 1){
-        this.setState({
-            isLoading: true
-        })
-        await Http.get(`/product?page=${page}`)
-        .then((res) => {
-            this.setState({
-                products: res.data.data.results,
-                currentPage: res.data.data.currentPage,
-                totalPage: res.data.data.totalPage,
-                isLoading: false
-            })
-            console.log(this.state.products)
-        })
-        .catch((err) => {
-            console.log(err.message)
-        })
+    async getDataProducts(){
+        await this.props.dispatch(fetchProduct())
     }
 
     showModalDelete(productId){
@@ -59,16 +39,23 @@ class ManageProduct extends Component {
             isLoadingBtn: true
         })
 
+
         Http.delete(`/product/${this.state.deleteProductId}`)
         .then((res) => {
             console.log(res.data)
             if (res.data.status === 200) {
                 this.setState({
-                    isLoadingBtn: false,
-                    isDone: true
+                    isLoadingBtn: false
                 })
+
+                const productIndex = this.props.product.productList.results.map(value => {
+                    return value.id
+                }).indexOf(this.state.deleteProductId)
+            
+                delete this.props.product.productList.results[productIndex]
+                this.props.dispatch(pushProduct(this.props.product.productList))
+
                 $(`#${this.state.modalId}`).modal('hide')
-                this.getDataProducts()
                 toast.success("Product successfully deleted!", {
                     className: "bg-success"
                 })
@@ -99,7 +86,7 @@ class ManageProduct extends Component {
     __renderProductList(){
         let element = []
 
-        if (this.state.isLoading) {
+        if (this.props.product.isLoading) {
             for(let i = 0; i < 5;i++){
                 element.push(
                     <tr key={i}>
@@ -142,7 +129,7 @@ class ManageProduct extends Component {
                 )
             }
         }else{
-            this.state.products.map((val, key) => {
+            this.props.product.productList.results.map((val, key) => {
                 element.push(
                     <tr key={key}>
                         <th scope="row">{ key+1 }</th>
@@ -223,23 +210,6 @@ class ManageProduct extends Component {
         }
     }
 
-    __renderPagination(){
-        let element = []
-        for (let i = 1; i < this.state.totalPage+1; i++) {
-            element.push(
-                <li key={i} className={i == this.state.currentPage ? "page-item active" : "page-item"}>
-                    <button className={i == this.state.currentPage ? "page-link bg-danger no-border" : "page-link"}
-                    onClick={() => this.getDataProducts(
-                        i
-                    )}>
-                        {i}
-                    </button>
-                </li>
-            )
-        }
-        return element
-    }
-
     render(){
         return(
             <div>
@@ -281,27 +251,8 @@ class ManageProduct extends Component {
                                         </table>
                                     </div>
                                 </div>
-                                <div className="card-footer">
-                                    <div className="nav justify-content-center mt-5">
-                                        <nav>
-                                            <ul className="pagination">
-                                                <li className={ this.state.currentPage === 1 ? "page-item disabled" : "page-item" }>
-                                                    <button className="page-link" onClick={ () => this.getDataProducts(this.state.currentPage - 1)}>
-                                                        <i className="fa fa-angle-left"></i>
-                                                        <span className="sr-only">Previous</span>
-                                                    </button>
-                                                </li>
-                                                {this.__renderPagination()}
-                                                <li className={ this.state.currentPage === this.state.totalPage ? "page-item disabled" : "page-item" }>
-                                                    <button className="page-link"
-                                                        onClick={ () => this.getDataProducts(this.state.currentPage + 1) }>
-                                                        <i className="fa fa-angle-right"></i>
-                                                        <span className="sr-only">Next</span>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </nav>
-                                    </div>
+                                <div className="card-footer nav justify-content-center">
+                                    <Pagination />
                                 </div>
                             </div>
                         </div>
@@ -313,4 +264,10 @@ class ManageProduct extends Component {
     }
 }
 
-export default ManageProduct
+const mapStateToProps = state => {
+    return {
+        product: state.Product
+    }
+}
+
+export default connect(mapStateToProps)(ManageProduct)

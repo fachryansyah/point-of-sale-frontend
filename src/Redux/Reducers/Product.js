@@ -35,6 +35,11 @@ const productList = (state = initialState, action) => {
                 searchName: action.payload.searchName,
                 productList: action.payload.res.data.data
             }
+        case 'PUSH_PRODUCT':
+            return {
+                ...state,
+                productList: action.payload
+            }
         default:
             return state
     }

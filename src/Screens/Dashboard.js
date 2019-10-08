@@ -7,7 +7,7 @@ import Shimmer from 'react-shimmer-effect'
 import Rupiah from 'rupiah-format'
 import Http from '../Http'
 import 'react-toastify/dist/ReactToastify.css'
-// import Navbar from '../Components/Navbar'
+import Navbar from '../Components/Navbar'
 import Pagination from '../Components/Pagination'
 import Sidebar from '../Components/Sidebar'
 import ModalCheckout from '../Components/ModalCheckout'
@@ -46,65 +46,11 @@ class Dashboard extends Component {
         console.log(this.state.carts)
     }
 
-    async componentDidUpdate(prevProps, prevState){
-        if (prevProps.data.isLoading !== this.props.data.isLoading) {
-            this.setState({
-                isLoading: this.props.data.isLoading
-            })
-        }
-        if (prevProps.data.productList !== this.props.data.productList) {
-            this.setState({
-                products: this.props.data.productList.results,
-                isLoading: this.props.data.productList.isLoading
-            })
-        }
-    }
-
-    // async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
-    //     this.setState({
-    //         isLoading: true
-    //     })
-    //     await Http.get(`/product?limit=4&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
-    //     .then((res) => {
-    //         this.setState({
-    //             products: res.data.data.results,
-    //             sortBy: sortBy,
-    //             sortMode: sortMode,
-    //             searchName: searchName,
-    //             currentPage: res.data.data.currentPage,
-    //             totalPage: res.data.data.totalPage,
-    //             isLoading: false
-    //         })
-    //     })
-    //     .catch((err) => {
-    //         this.setState({
-    //             isLoading: false
-    //         })
-    //         console.log(err.message)
-    //     })
-    // }
-
     async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
         await this.props.dispatch(fetchProduct(page, sortBy, sortMode, searchName))
         this.setState({
-            currentPage: this.props.data.productList.currentPage,
-            totalPage: this.props.data.productList.totalPage,
-            sortBy: sortBy,
-            sortMode: sortMode,
-            searchName: searchName,
-            isLoading: this.props.data.productList.isLoading
+            searchName: searchName
         })
-    }
-
-    async searchDataProducts(e){
-        if (e.key == 'Enter') {
-            await this.getDataProducts(
-                1,
-                this.state.sortBy,
-                this.state.sortMode,
-                e.target.value
-            )
-        }
     }
 
     async addToCart(product){
@@ -247,7 +193,7 @@ class Dashboard extends Component {
 
     __renderProductList(){
         let element = []
-        if (this.props.data.isLoading) {
+        if (this.props.product.isLoading) {
             for (var i = 0; i < 4; i++) {
                 element.push(
                     <div className="col-md-3 mt-5" key={i}>
@@ -268,7 +214,7 @@ class Dashboard extends Component {
                 )
             }
         }else{
-            this.props.data.productList.results.map((val, key) => {
+            this.props.product.productList.results.map((val, key) => {
                 element.push(
                     <div className="col-md-3 mt-5" key={val.id}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
@@ -350,32 +296,7 @@ class Dashboard extends Component {
         return(
             <div>
                 <Sidebar />
-                <nav className="navbar navbar-light bg-white p-0 custom-shadow-sm nav-fix">
-                    <div className="container-fluid">
-                        <div className="ml-7">
-                            <a to="/" className="navbar-brand">Pointzo</a>
-                        </div>
-                        <ul className="navbar-nav d-flex flex-row">
-                            <li className="nav-item  mt-2 mb-2">
-                                <div className="form-group m-0">
-                                    <div className="input-group input-group-alternative">
-                                        <div className="input-group-prepend">
-                                            <span className="input-group-text"><i className="fa fa-search"></i></span>
-                                        </div>
-                                        <input className="form-control form-control-alternative" placeholder="Search" type="text"
-                                            onKeyDown={(e) => this.searchDataProducts(e)}
-                                        />
-                                    </div>
-                                </div>
-                            </li>
-                            <li className="nav-item mt-2 mb-2">
-                                <button className="btn btn-danger" onClick={() => this.__toggleCartnav()}>
-                                    <i className="ni ni-cart"></i>
-                                </button>
-                            </li>
-                        </ul>
-                    </div>
-                </nav>
+                <Navbar />
 
                 <ModalCheckout
                     checkout={this.state.checkout}
@@ -389,11 +310,11 @@ class Dashboard extends Component {
                                 <div className="d-flex flex-row mr-3">
                                     <div className="custom-control custom-radio mt-2 mr-2">
                                         <input name="custom-radio-1" className="custom-control-input" id="radioAsc" type="radio"
-                                            value={this.props.data.sortMode}
-                                            checked={this.props.data.sortMode == "asc" ? true : false}
+                                            value={this.props.product.sortMode}
+                                            checked={this.props.product.sortMode == "asc" ? true : false}
                                             onChange={() => this.getDataProducts(
-                                                this.props.data.currentPage,
-                                                this.props.data.sortBy,
+                                                this.props.product.currentPage,
+                                                this.props.product.sortBy,
                                                 "asc"
                                             )}
                                         />
@@ -401,11 +322,11 @@ class Dashboard extends Component {
                                     </div>
                                     <div className="custom-control custom-radio mt-2">
                                         <input name="custom-radio-1" className="custom-control-input" id="radioDesc" type="radio"
-                                            value={this.props.data.sortMode}
-                                            checked={this.props.data.sortMode == "desc" ? true : false}
+                                            value={this.props.product.sortMode}
+                                            checked={this.props.product.sortMode == "desc" ? true : false}
                                             onChange={() => this.getDataProducts(
-                                                this.props.data.currentPage,
-                                                this.props.data.sortBy,
+                                                this.props.product.currentPage,
+                                                this.props.product.sortBy,
                                                 "desc"
                                             )}
                                          />
@@ -413,17 +334,17 @@ class Dashboard extends Component {
                                     </div>
                                 </div>
                                 <button type="button" className="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Sort by {this.props.data.sortBy == "created_at" ? "Latest" : this.props.data.sortBy}
+                                    Sort by {this.props.product.sortBy == "created_at" ? "Latest" : this.props.product.sortBy}
                                 </button>
                                 <div className="dropdown-menu">
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "name", this.props.data.sortMode)}>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.product.currentPage, "name", this.props.product.sortMode)}>
                                         Name
                                     </button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "price", "asc")}>Cheapest</button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "price", "desc")}>Expensive</button>
-                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.data.currentPage, "created_at", "desc")}>Latest</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.product.currentPage, "price", "asc")}>Cheapest</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.product.currentPage, "price", "desc")}>Expensive</button>
+                                    <button className="dropdown-item" onClick={() => this.getDataProducts(this.props.product.currentPage, "created_at", "desc")}>Latest</button>
                                     <div className="dropdown-divider"></div>
-                                    <a className="dropdown-item" onClick={() => this.getDataProducts(this.state.currentPage, "created_at", "desc")}>Reset</a>
+                                    <a className="dropdown-item" onClick={() => this.getDataProducts(this.props.product.currentPage, "created_at", "desc")}>Reset</a>
                                 </div>
                             </div>
                         </div>
@@ -476,7 +397,7 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        data: state.productList
+        product: state.Product
     }
 }
 

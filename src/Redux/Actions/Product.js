@@ -4,7 +4,7 @@ export const fetchProduct = (page = 1, sortBy = "created_at", sortMode = "desc",
     return {
         type: 'GET_PRODUCT',
         payload: new Promise((resolve, reject) => {
-            Http.get(`/product?limit=1&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
+            Http.get(`/product?limit=4&page=${page}&sort=${sortBy}&mode=${sortMode}&search=${searchName}`)
             .then(res => {
                 resolve({
                     res,
@@ -17,5 +17,12 @@ export const fetchProduct = (page = 1, sortBy = "created_at", sortMode = "desc",
                 reject(err)
             })
         })
+    }
+}
+
+export const pushProduct = (product) => {
+    return {
+        type: 'PUSH_PRODUCT',
+        payload: product
     }
 }

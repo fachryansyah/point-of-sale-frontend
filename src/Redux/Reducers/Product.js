@@ -14,7 +14,6 @@ const productList = (state = initialState, action) => {
                 isFulfilled: false,
                 isRejected: false
             }
-            break;
         case 'GET_PRODUCT_REJECTED':
             return {
                 ...state,
@@ -22,7 +21,6 @@ const productList = (state = initialState, action) => {
                 isFulfilled: false,
                 isRejected: true,
             }
-            break;
         case 'GET_PRODUCT_FULFILLED':
             return {
                 ...state,
@@ -31,10 +29,8 @@ const productList = (state = initialState, action) => {
                 isRejected: false,
                 productList: action.payload.data.data
             }
-            break;
         default:
             return state
-            break;
     }
 }
 

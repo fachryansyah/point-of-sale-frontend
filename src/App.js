@@ -26,7 +26,7 @@ class App extends Component {
             Http.get("/user")
             .then((res) => {
                 console.log(res.data)
-                if (res.data.status == 200) {
+                if (res.data.status === 200) {
                     toast.success("Logged in!", {
                         className: 'bg-success'
                     })
@@ -35,7 +35,7 @@ class App extends Component {
                     })
                 }
 
-                if (res.data.status == 403) {
+                if (res.data.status === 403) {
                     toast.error("Can't logged in, please re login!", {
                         className: 'bg-danger'
                     })

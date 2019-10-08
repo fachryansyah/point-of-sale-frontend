@@ -7,7 +7,7 @@ import $ from 'jquery'
 import Http from '../Http'
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
-import ModalDelete from '../Components/ModalDelete'
+// import ModalDelete from '../Components/ModalDelete'
 
 class ManageProduct extends Component {
     constructor(){
@@ -37,8 +37,6 @@ class ManageProduct extends Component {
                 products: res.data.data.results,
                 currentPage: res.data.data.currentPage,
                 totalPage: res.data.data.totalPage,
-                currentPage: res.data.data.currentPage,
-                totalPage: res.data.data.totalPage,
                 isLoading: false
             })
             console.log(this.state.products)
@@ -64,7 +62,7 @@ class ManageProduct extends Component {
         Http.delete(`/product/${this.state.deleteProductId}`)
         .then((res) => {
             console.log(res.data)
-            if (res.data.status == 200) {
+            if (res.data.status === 200) {
                 this.setState({
                     isLoadingBtn: false,
                     isDone: true
@@ -76,7 +74,7 @@ class ManageProduct extends Component {
                 })
             }
 
-            if (res.data.status == 500) {
+            if (res.data.status === 500) {
                 this.setState({
                     isLoadingBtn: false
                 })
@@ -150,7 +148,7 @@ class ManageProduct extends Component {
                         <th scope="row">{ key+1 }</th>
                         <td>{ val.name }</td>
                         <td>
-                            <img className="img-table" src={`${process.env.REACT_APP_BASE_URL}/images/${val.image}`} />
+                            <img className="img-table" src={`${process.env.REACT_APP_BASE_URL}/images/${val.image}`} alt="product image" />
                         </td>
                         <td>{ val.category }</td>
                         <td>

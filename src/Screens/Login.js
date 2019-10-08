@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Link, Redirect } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Http from '../Http'
 
@@ -34,11 +34,11 @@ class Login extends Component {
         })
         .then((res) => {
             console.log(res.data.status)
-            if (res.data.status == 200) {
+            if (res.data.status === 200) {
                 window.location.replace("/")
                 localStorage.setItem("apiToken", res.data.data.apiKey)
             }
-            if (res.data.status == 500) {
+            if (res.data.status === 500) {
                 toast.error(res.data.message, {
                     className: 'bg-danger'
                 })

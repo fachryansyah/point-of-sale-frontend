@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { BrowserRouter as Router, Route, Redirect} from 'react-router-dom'
+import { Provider } from 'react-redux'
 import Http from './Http'
+import Store from './Redux/store'
 import Dashboard from './Screens/Dashboard'
 import History from './Screens/History'
 import Login from './Screens/Login'
@@ -51,30 +53,34 @@ class App extends Component {
     render(){
         if (!this.state.isLoggedIn) {
             return(
+                <Provider store={Store}>
+                    <div className="bg-deep-white">
+                        <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
+                        <Router>
+                            <Redirect to="/login" />
+                            <Route path={'/login'} exact component={Login}></Route>
+                            <Route path={'/register'} exact component={Register}></Route>
+                        </Router>
+                    </div>
+                </Provider>
+            )
+        }
+        return(
+            <Provider store={Store}>
                 <div className="bg-deep-white">
                     <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
                     <Router>
-                        <Redirect to="/login" />
+                        <Redirect to="/" />
+                        <Route path={'/'} exact component={Dashboard}></Route>
+                        <Route path={'/add'} exact component={AddProduct}></Route>
+                        <Route path={'/update/:id'} exact component={UpdateProduct}></Route>
+                        <Route path={'/manage'} exact component={ManageProduct}></Route>
+                        <Route path={'/history'} exact component={History}></Route>
                         <Route path={'/login'} exact component={Login}></Route>
                         <Route path={'/register'} exact component={Register}></Route>
                     </Router>
                 </div>
-            )
-        }
-        return(
-            <div className="bg-deep-white">
-                <ToastContainer position={toast.POSITION.BOTTOM_RIGHT} />
-                <Router>
-                    <Redirect to="/" />
-                    <Route path={'/'} exact component={Dashboard}></Route>
-                    <Route path={'/add'} exact component={AddProduct}></Route>
-                    <Route path={'/update/:id'} exact component={UpdateProduct}></Route>
-                    <Route path={'/manage'} exact component={ManageProduct}></Route>
-                    <Route path={'/history'} exact component={History}></Route>
-                    <Route path={'/login'} exact component={Login}></Route>
-                    <Route path={'/register'} exact component={Register}></Route>
-                </Router>
-            </div>
+            </Provider>
         )
     }
 }

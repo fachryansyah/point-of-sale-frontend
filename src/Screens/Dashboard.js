@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { toast } from 'react-toastify'
+import { connect } from 'react-redux'
+import { getProduct } from '../Redux/Actions/Product'
 import $ from 'jquery'
 import Shimmer from 'react-shimmer-effect'
 import Rupiah from 'rupiah-format'
@@ -32,10 +34,17 @@ class Dashboard extends Component {
     }
 
     async componentDidMount(){
-        this.getDataProducts()
-        await this.setState({
-            carts: JSON.parse(localStorage.getItem("carts"))
-        })
+        // this.getDataProducts()
+        this.getProduct()
+
+        let cartsFromLocal = await JSON.parse(localStorage.getItem("carts"))
+
+        if (cartsFromLocal) {
+            await this.setState({
+                carts: cartsFromLocal
+            })
+        }
+        
         console.log(this.state.carts)
     }
 
@@ -63,6 +72,15 @@ class Dashboard extends Component {
         })
     }
 
+    async getProduct(){
+        await this.props.dispatch(getProduct())
+        console.log(this.props.data.productList)
+        this.setState({
+            products: this.props.data.productList,
+            isLoading: false
+        })
+    }
+
     async searchDataProducts(e){
         if (e.key == 'Enter') {
             await this.getDataProducts(
@@ -79,7 +97,7 @@ class Dashboard extends Component {
 
         let isProductAlreadyAdded = false
 
-        if (this.state.carts.length > 0) {
+        if (this.state.carts != null && this.state.carts.length > 0) {
             isProductAlreadyAdded = this.state.carts.find(cart => cart.id == id)
         }
 
@@ -113,7 +131,7 @@ class Dashboard extends Component {
     checkProductInCart(productId){
         let cart = false
 
-        if (this.state.carts.length > 0) {
+        if (this.state.carts != null && this.state.carts.length > 0) {
             cart = this.state.carts.find(cart => cart.id === productId)
         }
 
@@ -235,7 +253,7 @@ class Dashboard extends Component {
                 )
             }
         }else{
-            this.state.products.map((val, key) => {
+            this.state.products.results.map((val, key) => {
                 element.push(
                     <div className="col-md-3 mt-5" key={val.id}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
@@ -282,7 +300,7 @@ class Dashboard extends Component {
 
     __renderCartList(){
         let element = []
-        if (this.state.carts.length < 1) {
+        if (this.state.carts === null || this.state.carts.length < 1) {
             element.push(
                 <li className="text-center m-auto" key="1">
                     <img src={require('../Assets/img/undraw_empty_cart.svg')} className="img-fluid-50" />
@@ -325,9 +343,11 @@ class Dashboard extends Component {
 
     __renderTotalCart(){
         let total = 0
-        this.state.carts.forEach((val, key) => {
-            total += val.price
-        })
+        if (this.state.carts != null && this.state.carts.length < 1) {
+            this.state.carts.forEach((val, key) => {
+                total += val.price
+            })
+        }
         return (<b>{Rupiah.convert(total)}</b>)
     }
 
@@ -444,7 +464,7 @@ class Dashboard extends Component {
                 <div className="cartnav">
                     <div className="bg-white h-match-parent cart-fix shadow">
                         <div className="p-2 bg-red text-center">
-                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ this.state.carts.length }</span></h6>
+                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ (this.state.carts != null && this.state.carts.length < 1) ? this.state.carts.length : 0 }</span></h6>
                         </div>
                         <div className="pr-3 mt-3">
                             <ul className="list-group pr-2 pl-2 scrollview">
@@ -476,4 +496,10 @@ class Dashboard extends Component {
     }
 }
 
-export default Dashboard
+const mapStateToProps = state => {
+    return {
+        data: state.productList
+    }
+}
+
+export default connect(mapStateToProps) (Dashboard)

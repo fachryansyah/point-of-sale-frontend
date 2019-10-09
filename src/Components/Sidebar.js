@@ -56,7 +56,15 @@ class Sidebar extends Component {
                                     <i className="fa fa-history" style={{ fontSize: '1.75em', color: '#d93c34' }} />
                                 </NavIcon>
                                 <NavText style={{ color: '#e86f68' }}>
-                                    History
+                                    Order History
+                                </NavText>
+                            </NavItem>
+                            <NavItem eventKey="statistic">
+                                <NavIcon>
+                                    <i className="fa fa-line-chart" style={{ fontSize: '1.75em', color: '#d93c34' }} />
+                                </NavIcon>
+                                <NavText style={{ color: '#e86f68' }}>
+                                    Statistics Report
                                 </NavText>
                             </NavItem>
                             <NavItem eventKey="add">

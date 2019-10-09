@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { toast } from 'react-toastify'
 import { connect } from 'react-redux'
 import { fetchProduct } from '../Redux/Actions/Product'
+import { pushCart } from '../Redux/Actions/Cart'
 import $ from 'jquery'
 import Shimmer from 'react-shimmer-effect'
 import Rupiah from 'rupiah-format'
@@ -10,7 +11,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import Navbar from '../Components/Navbar'
 import Pagination from '../Components/Pagination'
 import Sidebar from '../Components/Sidebar'
-import ModalCheckout from '../Components/ModalCheckout'
+import ModalCheckout from '../Components/Modals/ModalCheckout'
 
 class Dashboard extends Component {
     constructor() {
@@ -34,16 +35,6 @@ class Dashboard extends Component {
 
     async componentDidMount(){
         this.getDataProducts()
-
-        let cartsFromLocal = await JSON.parse(localStorage.getItem("carts"))
-
-        if (cartsFromLocal) {
-            await this.setState({
-                carts: cartsFromLocal
-            })
-        }
-        
-        console.log(this.state.carts)
     }
 
     async getDataProducts(page = 1, sortBy = "created_at", sortMode = "desc", searchName = ""){
@@ -54,24 +45,20 @@ class Dashboard extends Component {
     }
 
     async addToCart(product){
-        const { id, name, image, qty, price } = product
+        const { id, name, image, price } = product
 
         let isProductAlreadyAdded = false
 
-        if (this.state.carts != null && this.state.carts.length > 0) {
-            isProductAlreadyAdded = this.state.carts.find(cart => cart.id == id)
+        if (this.props.cart.cartList != null && this.props.cart.cartList.length > 0) {
+            isProductAlreadyAdded = this.props.cart.cartList.find(cart => cart.id == id)
         }
 
         if (!isProductAlreadyAdded) {
             let cart = { id, name, image, qty: 1, price }
 
-            await this.setState({
-                carts: [...this.state.carts, cart]
-            })
+            await this.props.dispatch(pushCart(cart))
 
-            await localStorage.setItem("carts", JSON.stringify(this.state.carts))
-
-            console.log(this.state.carts)
+            await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
         }else{
             toast.success("Product already in cart!", {
                 className: "bg-danger-gradient"
@@ -80,37 +67,14 @@ class Dashboard extends Component {
 
     }
 
-    removeFromCart(index){
-        let carts = this.state.carts
-        carts.splice(index, 1)
-        this.setState({
-            carts: carts
-        })
-        localStorage.setItem("carts", JSON.stringify(carts))
-    }
-
     checkProductInCart(productId){
-        let cart = false
+        let isInCart = false
 
-        if (this.state.carts != null && this.state.carts.length > 0) {
-            cart = this.state.carts.find(cart => cart.id === productId)
+        if (this.props.cart.cartList != null && this.props.cart.cartList.length > 0) {
+            isInCart = this.props.cart.cartList.find(cart => cart.id === productId)
         }
 
-        return cart
-    }
-
-    async addQtyProduct(index){
-        let cart = this.state.carts
-        let product = await this.state.products.find((product) => {
-            return product.id == cart[index].id
-        })
-
-        cart[index].qty += 1
-        cart[index].price += product.price
-
-        this.setState({
-            carts: cart
-        })
+        return isInCart
     }
 
     async recudeQtyProduct(index){
@@ -132,63 +96,6 @@ class Dashboard extends Component {
         this.setState({
             carts: cart
         })
-    }
-
-    cancelCheckout(){
-        this.setState({
-            carts: []
-        })
-    }
-
-    async checkoutProduct(){
-
-        if (this.state.carts.length < 1) {
-            return toast.error("No product in cart", {
-                className: 'bg-danger'
-            })
-        }
-
-        this.setState({
-            isLoadingCheckout: true
-        })
-
-        await Http.post('/order', JSON.stringify({items: this.state.carts}), {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then((res) => {
-            console.log(res.data)
-            if (res.data.status == 200) {
-                this.setState({
-                    checkout: res.data.data,
-                    isLoadingCheckout: false
-                })
-                this.cancelCheckout()
-                $("#modalCheckout").modal("show")
-            }
-        })
-        .catch((err) => {
-            console.log(err.message)
-        })
-    }
-
-    showModalCheckout(){
-        $("#modalCheckout").modal("show")
-    }
-
-    __toggleCartnav(){
-        if (this.state.cartToggle) {
-            $(".cartnav").addClass("active")
-            this.setState({
-                cartToggle: false
-            })
-        }else{
-            $(".cartnav").removeClass("active")
-            this.setState({
-                cartToggle: true
-            })
-        }
     }
 
     __renderProductList(){
@@ -239,58 +146,6 @@ class Dashboard extends Component {
         return element
     }
 
-    __renderCartList(){
-        let element = []
-        if (this.state.carts === null || this.state.carts.length < 1) {
-            element.push(
-                <li className="text-center m-auto" key="1">
-                    <img src={require('../Assets/img/undraw_empty_cart.svg')} className="img-fluid-50" />
-                    <h4 className="mt-2">No product here</h4>
-                </li>
-            )
-        }else{
-            this.state.carts.map((val, key) => {
-                element.push(
-                    <li className="list-group-item no-border d-flex flex-row" key={key}>
-                        <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
-                        <div className="ml-2">
-                            <h6>{ val.name }</h6>
-                            <p><span className="badge badge-primary">{ val.qty }</span></p>
-                            <div className="d-flex flex-row">
-                                <div className="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => this.recudeQtyProduct(key)}><i className="fa fa-minus" /></button>
-                                    <button type="button" className="btn btn-outline-success btn-sm" onClick={() => this.addQtyProduct(key)}><i className="fa fa-plus" /></button>
-                                </div>
-                                <p className="p-0 m-0 ml-2"><span className="badge badge-danger">{ Rupiah.convert(val.price) }</span></p>
-                            </div>
-                            <div className="d-flex flex-column mt-1">
-                                <button className="btn btn-outline-danger btn-sm btn-block" onClick={() => this.removeFromCart(key)}>Remove</button>
-                            </div>
-                        </div>
-                    </li>
-                )
-            })
-        }
-        return element
-    }
-
-    __renderBtnCheckout(){
-        if (this.state.isLoadingCheckout) {
-            return(<div class="lds-ripple"><div></div><div></div></div>)
-        }else{
-            return(<button className="btn btn-success btn-sm btn-block" onClick={() => this.checkoutProduct()}>Checkout</button>)
-        }
-    }
-
-    __renderTotalCart(){
-        let total = 0
-        if (this.state.carts != null && this.state.carts.length < 1) {
-            this.state.carts.forEach((val, key) => {
-                total += val.price
-            })
-        }
-        return (<b>{Rupiah.convert(total)}</b>)
-    }
 
     render(){
         return(
@@ -360,36 +215,6 @@ class Dashboard extends Component {
                     </div>
                 </div>
 
-                <div className="cartnav">
-                    <div className="bg-white h-match-parent cart-fix shadow">
-                        <div className="p-2 bg-red text-center">
-                            <h6 className="text-white font-weight-bold mt-2">Cart <span className="badge badge-white">{ (this.state.carts != null && this.state.carts.length < 1) ? this.state.carts.length : 0 }</span></h6>
-                        </div>
-                        <div className="pr-3 mt-3">
-                            <ul className="list-group pr-2 pl-2 scrollview">
-                                { this.__renderCartList() }
-                            </ul>
-                            <div className="row custom-footer ml-1">
-                                <div className="col-md-12 mb-1">
-                                    <div className="d-flex flex-row">
-                                        <div className="mr-auto">
-                                            <b>Total: </b>
-                                        </div>
-                                        <div className="ml-auto">
-                                            {this.__renderTotalCart()}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="col-md-6 ml-auto">
-                                    {this.__renderBtnCheckout()}
-                                </div>
-                                <div className="col-md-6">
-                                    <button className="btn btn-danger btn-sm btn-block" onClick={() => this.cancelCheckout()}>Cancel</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         )
     }
@@ -397,7 +222,8 @@ class Dashboard extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        product: state.Product
+        product: state.Product,
+        cart: state.Cart
     }
 }
 

@@ -6,6 +6,7 @@ import Http from './Http'
 import Store from './Redux/store'
 import Dashboard from './Screens/Dashboard'
 import History from './Screens/History'
+import Statistic from './Screens/Statistic'
 import Login from './Screens/Login'
 import Register from './Screens/Register'
 import AddProduct from './Screens/AddProduct'
@@ -76,6 +77,7 @@ class App extends Component {
                         <Route path={'/update/:id'} exact component={UpdateProduct}></Route>
                         <Route path={'/manage'} exact component={ManageProduct}></Route>
                         <Route path={'/history'} exact component={History}></Route>
+                        <Route path={'/statistic'} exact component={Statistic}></Route>
                         <Route path={'/login'} exact component={Login}></Route>
                         <Route path={'/register'} exact component={Register}></Route>
                     </Router>

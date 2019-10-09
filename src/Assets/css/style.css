@@ -250,6 +250,16 @@ footer {
     background-color: #fff !important;
 }
 
+.card-stats{
+    border-radius: 12px;
+    border: none !important;
+    box-shadow: 0px 4px 26px 0px rgba(0,0,0,0.3) !important;
+}
+
+.op-7{
+    opacity: 0.7;
+}
+
 .autocomplete{
     position: absolute;
     right: 98px;

@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
+import $ from 'jquery'
 import { connect } from 'react-redux'
 import { fetchProduct } from '../Redux/Actions/Product'
-import { Link } from 'react-router-dom'
+import CartView from './CartView'
 
 class Navbar extends Component {
 
     constructor(props){
         super(props)
         this.state = {
-            showAutocomplete: false
+            showAutocomplete: false,
+            cartToggle: true
         }
     }
 
@@ -40,6 +42,20 @@ class Navbar extends Component {
         }
     }
 
+    __toggleCartnav(){
+        if (this.state.cartToggle) {
+            $(".cartnav").addClass("active")
+            this.setState({
+                cartToggle: false
+            })
+        }else{
+            $(".cartnav").removeClass("active")
+            this.setState({
+                cartToggle: true
+            })
+        }
+    }
+
     __renderAutocomplete(){
         if (this.state.showAutocomplete) {
             return(
@@ -61,6 +77,7 @@ class Navbar extends Component {
     render(){
         return(
             <div>
+                <CartView />
                 <nav className="navbar navbar-light bg-white p-0 custom-shadow-sm nav-fix">
                     <div className="container-fluid">
                         <div className="ml-7">

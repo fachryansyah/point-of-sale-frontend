@@ -78,7 +78,8 @@ class CartView extends Component {
             return product.id == cart[index].id
         })
 
-        this.props.dispatch(addQtyCart(index, product.price, product.qty))
+        await this.props.dispatch(addQtyCart(index, product.price, product.qty))
+        await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
     async recudeQtyProduct(index){
@@ -87,7 +88,8 @@ class CartView extends Component {
             return product.id == cart[index].id
         })
 
-        this.props.dispatch(reduceQtyCart(index, product.price))
+        await this.props.dispatch(reduceQtyCart(index, product.price))
+        await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
     __renderCartList(){

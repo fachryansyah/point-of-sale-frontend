@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { connect } from 'react-redux'
-import { fetchProduct, pushProduct } from '../Redux/Actions/Product'
+import { fetchProduct, removeProduct } from '../Redux/Actions/Product'
 import Rupiah from 'rupiah-format'
 import Shimmer from 'react-shimmer-effect'
 import $ from 'jquery'
@@ -48,12 +48,7 @@ class ManageProduct extends Component {
                     isLoadingBtn: false
                 })
 
-                const productIndex = this.props.product.productList.results.map(value => {
-                    return value.id
-                }).indexOf(this.state.deleteProductId)
-            
-                delete this.props.product.productList.results[productIndex]
-                this.props.dispatch(pushProduct(this.props.product.productList))
+                this.props.dispatch(removeProduct(this.state.deleteProductId))
 
                 $(`#${this.state.modalId}`).modal('hide')
                 toast.success("Product successfully deleted!", {

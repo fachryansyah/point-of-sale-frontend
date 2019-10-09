@@ -40,6 +40,17 @@ const productList = (state = initialState, action) => {
                 ...state,
                 productList: action.payload
             }
+        case 'REMOVE_PRODUCT':
+            const productIndex = state.productList.results.map(val => {
+                return val.id
+            }).indexOf(action.payload)
+
+            delete state.productList.results[productIndex]
+
+            return {
+                ...state,
+                productList: state.productList
+            }
         default:
             return state
     }

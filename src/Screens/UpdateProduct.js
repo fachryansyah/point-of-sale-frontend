@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Http from '../Http'
-import { Redirect } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { updateProduct } from '../Redux/Actions/Product'
 import Shimmer from 'react-shimmer-effect'
 import { toast } from 'react-toastify'
 import Navbar from '../Components/Navbar'
@@ -108,8 +109,7 @@ class UpdateProduct extends Component {
         await Http.put(`/product/${this.state.id}`, formData)
         .then((res) => {
             console.log(res)
-            if (res.data.status == 304) {
-                console.log(res.data.errors)
+            if (res.data.status === 304) {
                 this.setState({
                     errors: res.data.errors,
                     isLoadingBtn: false
@@ -119,10 +119,13 @@ class UpdateProduct extends Component {
                 })
             }
 
-            if (res.data.status == 200) {
+            if (res.data.status === 200) {
                 toast.success("Product successfully updated!", {
                     className: "bg-success"
                 })
+
+                this.props.dispatch(updateProduct(res.data.data))
+
                 this.setState({
                     isLoadingBtn: false
                 })
@@ -202,7 +205,7 @@ class UpdateProduct extends Component {
                     <div className="col-md-6 form-group">
                         <label>Name</label>
                         <input
-                            className={this.state.errors.find(error => error.param == "name") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "name") ? "form-control is-invalid" : "form-control"}
                             name="name"
                             type="text"
                             value={this.state.name}
@@ -213,10 +216,10 @@ class UpdateProduct extends Component {
                     <div className="col-md-6 form-group">
                         <label>Category</label>
                         <select
-                            className="form-control"
                             name="category_id"
+                            value={this.state.category_id}
                             onChange={(e) => this.handleChange(e)}
-                            className={this.state.errors.find(error => error.param == "category_id") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "category_id") ? "form-control is-invalid" : "form-control"}
                         >
                             <option value="">--Select--</option>
                             {
@@ -225,7 +228,6 @@ class UpdateProduct extends Component {
                                         <option
                                             value={val.id}
                                             key={key}
-                                            selected={this.state.category_id == val.id ? true : false}
                                         >
                                             {val.name}
                                         </option>
@@ -241,7 +243,7 @@ class UpdateProduct extends Component {
                     <div className="col-md-4 form-group">
                         <label>Image</label>
                         <input
-                            className={this.state.errors.find(error => error.param == "image") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "image") ? "form-control is-invalid" : "form-control"}
                             name="image"
                             onChange={(e) => this.handleImage(e)}
                             type="file"
@@ -251,7 +253,7 @@ class UpdateProduct extends Component {
                     <div className="col-md-4 form-group">
                         <label>Price</label>
                         <input
-                            className={this.state.errors.find(error => error.param == "price") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "price") ? "form-control is-invalid" : "form-control"}
                             name="price"
                             onChange={(e) => this.handleChange(e)}
                             type="number"
@@ -263,7 +265,7 @@ class UpdateProduct extends Component {
                     <div className="col-md-4 form-group">
                         <label>Quantity</label>
                         <input
-                            className={this.state.errors.find(error => error.param == "qty") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "qty") ? "form-control is-invalid" : "form-control"}
                             name="qty"
                             onChange={(e) => this.handleChange(e)}
                             type="number"
@@ -278,7 +280,7 @@ class UpdateProduct extends Component {
                     <div className="col-md-12 form-group">
                         <label>Description</label>
                         <textarea
-                            className={this.state.errors.find(error => error.param == "description") ? "form-control is-invalid" : "form-control"}
+                            className={this.state.errors.find(error => error.param === "description") ? "form-control is-invalid" : "form-control"}
                             name="description"
                             value={this.state.description}
                             onChange={(e) => this.handleChange(e)} rows="3"
@@ -304,7 +306,7 @@ class UpdateProduct extends Component {
 
     __renderBtnSave(){
         if (this.state.isLoadingBtn) {
-            return <div class="lds-ripple"><div></div><div></div></div>
+            return <div className="lds-ripple"><div></div><div></div></div>
         }else{
             return (
                 <button
@@ -351,7 +353,7 @@ class UpdateProduct extends Component {
                     </div>
                     <div className="col-md-5 mt-90">
                         <div className="container">
-                            <img className="img-fluid" src={this.state.imagePreview} onChange={(e) => this.handleImage(e)} />
+                            <img className="img-fluid" src={this.state.imagePreview} onChange={(e) => this.handleImage(e)} alt="image product" />
                         </div>
                     </div>
                 </div>
@@ -360,4 +362,10 @@ class UpdateProduct extends Component {
     }
 }
 
-export default UpdateProduct
+const mapStateToProps = state => {
+    return {
+        product: state.Product
+    }
+}
+
+export default connect(mapStateToProps)(UpdateProduct)

@@ -27,6 +27,13 @@ export const pushProduct = (product) => {
     }
 }
 
+export const updateProduct = (product) => {
+    return {
+        type: 'UPDATE_PRODUCT',
+        payload: product
+    }
+}
+
 export const removeProduct = (productId) => {
     return {
         type: 'REMOVE_PRODUCT',

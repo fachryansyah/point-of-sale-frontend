@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { pushProduct } from '../Redux/Actions/Product'
 import Http from '../Http'
 import { Redirect } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -94,7 +96,6 @@ class AddProduct extends Component {
         .then((res) => {
             console.log(res)
             if (res.data.status == 304) {
-                console.log(res.data.errors)
                 this.setState({ errors: res.data.errors, isLoading: false })
                 toast.error("Oops validation error, please check your fields", {
                     className: "bg-danger"
@@ -105,6 +106,9 @@ class AddProduct extends Component {
                 toast.success("Product successfully created!", {
                     className: "bg-success"
                 })
+
+                this.props.dispatch(pushProduct(res.data.data))
+
                 this.setState({
                     toDashboard: true,
                     isLoading: false
@@ -257,4 +261,10 @@ class AddProduct extends Component {
     }
 }
 
-export default AddProduct
+const mapStateToProps = state => {
+    return {
+        product: state.Product
+    }
+}
+
+export default connect(mapStateToProps)(AddProduct)

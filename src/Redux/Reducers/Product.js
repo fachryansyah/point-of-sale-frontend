@@ -38,7 +38,25 @@ const productList = (state = initialState, action) => {
         case 'PUSH_PRODUCT':
             return {
                 ...state,
-                productList: action.payload
+                productList: {
+                    results: [...state.productList.results, action.payload]
+                }
+            }
+        case 'UPDATE_PRODUCT':
+            const product = state.productList.results.find(product => {
+                return product.id === action.payload.id
+            })
+
+            product.name = action.payload.name
+            product.description = action.payload.description
+            product.image = action.payload.image
+            product.price = action.payload.price
+            product.qty = action.payload.qty
+            product.category_id = action.payload.category_id
+
+            return {
+                ...state,
+                productList: state.productList
             }
         case 'REMOVE_PRODUCT':
             const productIndex = state.productList.results.map(val => {

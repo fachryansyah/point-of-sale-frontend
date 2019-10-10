@@ -1,34 +1,191 @@
 import React, { Component } from 'react'
+import Http from '../Http'
+import Rupiah from 'rupiah-format'
 import { Line } from 'react-chartjs-2'
+import Chart from 'chart.js'
 import Navbar from '../Components/Navbar'
 import Sidebar from '../Components/Sidebar'
 
 class Statistic extends Component {
+
+    constructor(props){
+        super(props)
+        this.state = {
+            currentData:[],
+            lastData: [],
+            chartLable: [],
+            chartMode: 'Weekly'
+        }
+    }
+
+    componentDidMount(){
+        this.getDataWeekly()
+    }
+
+    async getDataWeekly() {
+
+        await this.setState({
+            chartMode: 'Weekly',
+            currentData: [0, 0, 0, 0, 0, 0, 0],
+            lastData: [0, 0, 0, 0, 0, 0, 0],
+            chartLable: ['Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        })
+
+        await Http.get('/order/chart/weekly')
+        .then((res) => {
+            res.data.data.current.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.currentData
+                data[index] = val.amount
+
+                this.setState({
+                    currentData: data
+                })
+            })
+
+            res.data.data.last.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.lastData
+                data[index] = val.amount
+                console.log(data)
+
+                this.setState({
+                    lastData: data
+                })
+            })
+
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
+    async getDataMonthly(){
+        this.setState({
+            chartMode: 'Monthly',
+            currentData: [0, 0, 0, 0],
+            lastData: [0, 0, 0, 0],
+            chartLable: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
+        })
+
+        await Http.get('/order/chart/monthly')
+        .then((res) => {
+            res.data.data.current.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.currentData
+                data[index] = val.amount
+
+                this.setState({
+                    currentData: data
+                })
+            })
+
+            res.data.data.last.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.lastData
+                data[index] = val.amount
+                console.log(data)
+
+                this.setState({
+                    lastData: data
+                })
+            })
+
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
+    async getDataYearly(){
+        this.setState({
+            chartMode: 'Yearly',
+            currentData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            lastData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            chartLable: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        })
+
+        await Http.get('/order/chart/yearly')
+        .then((res) => {
+            res.data.data.current.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.currentData
+                data[index] = val.amount
+
+                this.setState({
+                    currentData: data
+                })
+            })
+
+            res.data.data.last.forEach((val) => {
+                let index = this.state.chartLable.map((valMap) => {
+                    return valMap
+                }).indexOf(val.label)
+
+                let data = this.state.lastData
+                data[index] = val.amount
+                console.log(data)
+
+                this.setState({
+                    lastData: data
+                })
+            })
+
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
     render(){
         const options = {
             options: {
                 scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true
+                    yAxes: [
+                        {   
+                            bounds: 'ticks',
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    // return parseFloat(value).toFixed(2);
+                                    return Rupiah.convert(value)
+                                },
+                                beginAtZero: true
+                            }
                         }
-                    }]
+                    ]
                 }
             }
-        };
+        }
         const data = {
-            labels: ['1-10-2019', '2-10-2019', '3-10-2019', '4-10-2019', '5-10-2019', '6-10-2019', '7-10-2019', '8-10-2019', '9-10-2019', '10-10-2019', '11-10-2019', '12-10-2019'],
+            labels: this.state.chartLable,
             datasets: [
                 {
-                    label: 'This Month',
-                    data: [12, 19, 3, 5, 2, 3, 29, 39, 36, 21, 12, 6],
+                    label: `This ${this.state.chartMode}`,
+                    // labels: this.state.chart.current.label,
+                    data: this.state.currentData,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                     borderWidth: 3
                 },
                 {
-                    label: 'Last Month',
-                    data: [14, 12, 7, 15, 12, 23, 31, 16, 30, 37,13],
+                    label: `Last ${this.state.chartMode}`,
+                    // labels: this.state.chart.current.label,
+                    data: this.state.lastData,
                     borderColor: 'rgba(52, 140, 235, 1)',
                     backgroundColor: 'rgba(0, 0, 0, 0)',
                     borderWidth: 3
@@ -118,12 +275,11 @@ class Statistic extends Component {
                                             </div>
                                             <div className="ml-auto">
                                             <div className="btn-group">
-                                                <button type="button" className="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Month</button>
+                                                <button type="button" className="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.state.chartMode}</button>
                                                 <div className="dropdown-menu">
-                                                    <a className="dropdown-item" href="#">Day</a>
-                                                    <a className="dropdown-item" href="#">Week</a>
-                                                    <a className="dropdown-item" href="#">Month</a>
-                                                    <a className="dropdown-item" href="#">Year</a>
+                                                    <button className="dropdown-item" onClick={() => this.getDataWeekly()}>Week</button>
+                                                    <button className="dropdown-item" onClick={() => this.getDataMonthly()}>Month</button>
+                                                    <button className="dropdown-item" onClick={() => this.getDataYearly()}>Year</button>
                                                     <div className="dropdown-divider"></div>
                                                     <a className="dropdown-item" href="#">Separated link</a>
                                                 </div>
@@ -134,7 +290,7 @@ class Statistic extends Component {
                                             data={data}
                                             width={100}
                                             height={30}
-                                            options={options}
+                                            options={options.options}
                                         />
                                     </div>
                                 </div>

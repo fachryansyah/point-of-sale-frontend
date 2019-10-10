@@ -45,7 +45,7 @@ class Dashboard extends Component {
     }
 
     async addToCart(product){
-        const { id, name, image, price } = product
+        const { id, name, image, price, qty } = product
 
         let isProductAlreadyAdded = false
 
@@ -54,7 +54,7 @@ class Dashboard extends Component {
         }
 
         if (!isProductAlreadyAdded) {
-            let cart = { id, name, image, qty: 1, price }
+            let cart = { id, name, image, qty: 1, price, currentPrice: price, currentQty: qty }
 
             await this.props.dispatch(pushCart(cart))
 
@@ -75,27 +75,6 @@ class Dashboard extends Component {
         }
 
         return isInCart
-    }
-
-    async recudeQtyProduct(index){
-        let cart = this.state.carts
-        let product = await this.state.products.find((product) => {
-            return product.id == cart[index].id
-        })
-
-        cart[index].qty -= 1
-        cart[index].price -= product.price
-
-        console.log(product.price)
-
-        if (cart[index].qty < 1) {
-            cart[index].qty = 1
-            cart[index].price = product.price
-        }
-
-        this.setState({
-            carts: cart
-        })
     }
 
     __renderProductList(){

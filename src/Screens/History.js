@@ -42,7 +42,7 @@ class History extends Component {
             orderId: id,
             isLoadingDetail: true
         })
-        await Http.get(`/order/${id}`)
+        await Http.get(`/order/d/${id}`)
         .then((res) => {
             if (res.data.status == 200) {
                 this.setState({

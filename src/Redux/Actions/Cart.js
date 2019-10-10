@@ -47,3 +47,9 @@ export const removeCart = (index) => {
         payload: index
     }
 }
+
+export const cleanCart = () =>{
+    return {
+        type: 'CLEAN_CART'
+    }
+}

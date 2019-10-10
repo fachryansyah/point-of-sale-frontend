@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { fetchCart, addQtyCart, reduceQtyCart, removeCart } from '../Redux/Actions/Cart'
+import { fetchCart, addQtyCart, reduceQtyCart, removeCart, cleanCart } from '../Redux/Actions/Cart'
 import $ from 'jquery'
 import { toast } from 'react-toastify'
 import Rupiah from 'rupiah-format'
@@ -47,13 +47,14 @@ class CartView extends Component {
                 'Content-Type': 'application/json',
             }
         })
-        .then((res) => {
+        .then( async (res) => {
             if (res.data.status == 200) {
                 this.setState({
+                    checkout: res.data.data,
                     isLoadingCheckout: false
                 })
-                this.cancelCheckout()
-                $(`#${this.state.modalCheckout}`).modal("show")
+                await this.cancelCheckout()
+                $(`#${this.state.modalId}`).modal("show")
             }
         })
         .catch((err) => {
@@ -66,29 +67,22 @@ class CartView extends Component {
         await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
-    cancelCheckout(){
-        this.setState({
-            carts: []
-        })
+    async cancelCheckout(){
+        await this.props.dispatch(cleanCart())
+        await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
     async addQtyProduct(index){
         let cart = this.props.cart.cartList
-        let product = await this.props.product.productList.results.find((product) => {
-            return product.id == cart[index].id
-        })
 
-        await this.props.dispatch(addQtyCart(index, product.price, product.qty))
+        await this.props.dispatch(addQtyCart(index, cart[index].currentPrice, cart[index].currentQty))
         await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
     async recudeQtyProduct(index){
         let cart = this.props.cart.cartList
-        let product = await this.props.product.productList.results.find((product) => {
-            return product.id == cart[index].id
-        })
 
-        await this.props.dispatch(reduceQtyCart(index, product.price))
+        await this.props.dispatch(reduceQtyCart(index, cart[index].currentPrice))
         await localStorage.setItem("carts", JSON.stringify(this.props.cart.cartList))
     }
 
@@ -129,7 +123,7 @@ class CartView extends Component {
 
     __renderTotalCart(){
         let total = 0
-        if (this.props.cart.cartList != null && this.props.cart.cartList.length < 1) {
+        if (this.props.cart.cartList != null && this.props.cart.cartList.length > 0) {
             this.props.cart.cartList.forEach((val, key) => {
                 total += val.price
             })

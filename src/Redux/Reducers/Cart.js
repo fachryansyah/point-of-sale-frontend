@@ -44,6 +44,11 @@ const cart = (state = initialState, action) => {
                 ...state,
                 cartList: state.cartList
             }
+        case 'CLEAN_CART':
+            return {
+                ...state,
+                cartList: []
+            }
     
         default:
             return state

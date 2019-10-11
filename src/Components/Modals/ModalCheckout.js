@@ -38,7 +38,7 @@ class ModalCheckout extends Component {
                                             <b>Total</b>
                                         </div>
                                         <div className="ml-auto">
-                                            {Rupiah.convert(this.props.checkout.total_price_order)}
+                                            {Rupiah.convert(this.props.checkout.amount)}
                                         </div>
                                     </div>
                                 </li>

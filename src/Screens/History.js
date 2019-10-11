@@ -167,7 +167,7 @@ class History extends Component {
             <div>
                 <Navbar />
                 <Sidebar />
-                <div className="row">
+                <div className="row mb-5">
                     <div className="col-md-1"></div>
                     <div className="col-md-5 mt-90">
                         <div className="card shadow">

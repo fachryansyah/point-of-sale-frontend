@@ -42,7 +42,17 @@ class CartView extends Component {
             isLoadingCheckout: true
         })
 
-        await Http.post('/order', JSON.stringify({items: this.props.cart.cartList}), {
+        let amount = 0
+        if (this.props.cart.cartList != null && this.props.cart.cartList.length > 0) {
+            this.props.cart.cartList.forEach((val, key) => {
+                amount += val.price
+            })
+        }
+
+        await Http.post('/order', JSON.stringify({
+                amount: amount,
+                items: this.props.cart.cartList
+            }), {
             headers: {
                 'Content-Type': 'application/json',
             }

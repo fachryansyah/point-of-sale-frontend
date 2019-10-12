@@ -157,7 +157,7 @@ class AddProduct extends Component {
                     <div className="col-md-1">
                         <Sidebar />
                     </div>
-                    <div className="col-md-6 mt-90">
+                    <div className=" animated fadeInUp delay-mili-1s col-md-6 mt-90">
                         <div className="card custom-shadow">
                             <div className="card-body">
 

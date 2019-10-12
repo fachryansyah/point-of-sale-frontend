@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import Moment from 'moment-timezone'
 import Http from '../Http'
 import Rupiah from 'rupiah-format'
 import Shimmer from 'react-shimmer-effect'
@@ -12,6 +13,8 @@ class History extends Component {
         this.state = {
             orders: [],
             orderId: "",
+            currentPage: '',
+            totalPage: '',
             orderDetail: {
                 items: []
             },
@@ -24,13 +27,15 @@ class History extends Component {
         this.getOrderHistory()
     }
 
-    async getOrderHistory(){
-        await Http.get("/order")
+    async getOrderHistory(page = 1, receipt = ''){
+        await Http.get(`/order?page=${page}&receipt=${receipt}`)
         .then((res) => {
             if (res.data.status == 200) {
                 console.log(res.data.data)
                 this.setState({
-                    orders: res.data.data,
+                    orders: res.data.data.results,
+                    totalPage: res.data.data.totalPage,
+                    currentPage: res.data.data.currentPage,
                     isLoadingAll: false
                 })
             }
@@ -51,6 +56,12 @@ class History extends Component {
                 })
             }
         })
+    }
+
+    handleSearch(event){
+        if (event.key == 'Enter') {
+            this.getOrderHistory(this.state.currentPage, event.target.value)   
+        }
     }
 
     __renderOrderList(){
@@ -81,8 +92,11 @@ class History extends Component {
                     >
                         <div className="d-flex w-100 justify-content-between">
                             <h5 className={this.state.orderId == val.id ? "mb-1 text-white" : "mb-1"}>#{val.receipt_no}</h5>
-                            <small>{val.created_at}</small>
+                            <small>{Moment.tz(val.created_at, 'Asia/Jakarta').format('MMMM Do YYYY, h:mm:ss a')}</small>
                         </div>
+                        <span className={this.state.orderId == val.id ? "badge bg-white text-dark" : "badge badge-danger"}>
+                            <p className="m-0 font-weight-bold">{Rupiah.convert(val.amount)}</p>
+                        </span>
                     </button>
                 )
             })
@@ -162,6 +176,23 @@ class History extends Component {
         }
     }
 
+    __renderPagination(){
+        let element = []
+        for (let i = 1; i < this.state.totalPage+1; i++) {
+            element.push(
+                <li key={i} className={i == this.state.currentPage ? "page-item active" : "page-item"}>
+                    <button className={i == this.state.currentPage ? "page-link bg-danger no-border" : "page-link"}
+                    onClick={() => {
+                        this.getOrderHistory(i)
+                    }}>
+                        {i}
+                    </button>
+                </li>
+            )
+        }
+        return element
+    }
+
     render(){
         return(
             <div>
@@ -169,12 +200,50 @@ class History extends Component {
                 <Sidebar />
                 <div className="row mb-5">
                     <div className="col-md-1"></div>
-                    <div className="col-md-5 mt-90">
+                    <div className="col-md-6 mt-90">
                         <div className="card shadow">
                             <div className="card-body">
-                                <h4 className="card-header">Order History</h4>
+                                <div className="d-flex flex-row">
+                                    <div className="mr-auto">
+                                        <h4 className="card-header">Order History</h4>
+                                    </div>
+                                    <div className="ml-auto">
+                                    <div className="form-group mt-2">
+                                        <div className="input-group input-group-alternative">
+                                            <div className="input-group-prepend">
+                                                <span className="input-group-text"><i className="fa fa-search"></i></span>
+                                            </div>
+                                            <input
+                                                className="form-control form-control-alternative"
+                                                placeholder="Receipt no" type="text"
+                                                onKeyDown={(event) => this.handleSearch(event)}
+                                            />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="list-group">
                                     { this.__renderOrderList() }
+                                </div>
+                                <div className="nav justify-content-center mt-4">
+                                    <nav>
+                                        <ul className="pagination">
+                                            <li className={ this.state.currentPage === 1 ? "page-item disabled" : "page-item" }>
+                                                <button className="page-link" onClick={ () => this.getOrderHistory(this.state.currentPage - 1)}>
+                                                    <i className="fa fa-angle-left"></i>
+                                                    <span className="sr-only">Previous</span>
+                                                </button>
+                                            </li>
+                                            {this.__renderPagination()}
+                                            <li className={ this.state.currentPage === this.state.totalPage ? "page-item disabled" : "page-item" }>
+                                                <button className="page-link"
+                                                    onClick={ () => this.getOrderHistory(this.state.currentPage + 1) }>
+                                                    <i className="fa fa-angle-right"></i>
+                                                    <span className="sr-only">Next</span>
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

@@ -286,7 +286,7 @@ class Statistic extends Component {
                     <div className="col-md-10 mt-90">
                         <h4>Statistics</h4>
                         <div className="row mt-4">
-                            <div className="col-xl-4 col-md-4 col-lg-6">
+                            <div className="animated fadeInUp delay-mili-1s faster col-xl-4 col-md-4 col-lg-6">
                                 <div className="card bg-gradient-danger op-7 card-stats mb-4 mb-xl-0">
                                     <div className="card-body">
                                     <div className="row">
@@ -307,7 +307,7 @@ class Statistic extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-xl-4 col-md-4 col-lg-6">
+                            <div className="animated fadeInUp delay-mili-2s faster col-xl-4 col-md-4 col-lg-6">
                                 <div className="card bg-gradient-info op-7 card-stats mb-4 mb-xl-0">
                                     <div className="card-body">
                                     <div className="row">
@@ -328,7 +328,7 @@ class Statistic extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-xl-4 col-md-4 col-lg-6">
+                            <div className="animated fadeInUp delay-mili-3s faster col-xl-4 col-md-4 col-lg-6">
                                 <div className="card bg-gradient-success op-7 card-stats mb-4 mb-xl-0">
                                     <div className="card-body">
                                     <div className="row">
@@ -351,7 +351,7 @@ class Statistic extends Component {
                             </div>
                         </div>
                         <div className="row mt-5">
-                            <div className="col-md-12">
+                            <div className="animated fadeInUp delay-mili-4s col-md-12">
                                 <div className="card custom-shadow">
                                     <div className="card-body">
                                         <div className="d-flex flex-row mb-3">

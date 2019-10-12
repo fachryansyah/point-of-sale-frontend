@@ -94,7 +94,6 @@ class Navbar extends Component {
                                             className="form-control form-control-alternative"
                                             placeholder="Search" type="text"
                                             onKeyDown={(event) => this.searchDataProducts(event)}
-                                            onChange={(event) => this.handleChange(event)}
                                         />
                                     </div>
                                 </div>

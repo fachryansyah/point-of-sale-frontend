@@ -301,6 +301,26 @@ footer {
   animation-delay: -0.5s;
 }
 
+.delay-6s{
+    animation-delay: 6s;
+}
+
+.delay-mili-1s{
+    animation-delay: 0.2s;
+}
+.delay-mili-2s{
+    animation-delay: 0.4s;
+}
+.delay-mili-3s{
+    animation-delay: 0.6s;
+}
+.delay-mili-4s{
+    animation-delay: 0.8s;
+}
+.delay-mili-5s{
+    animation-delay: 1s;
+}
+
 @keyframes lds-ripple {
   0% {
     top: 28px;

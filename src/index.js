@@ -11,6 +11,7 @@ import "./Assets/vendor/nucleo/css/nucleo.css";
 import "./Assets/vendor/font-awesome/css/font-awesome.min.css";
 import "./Assets/scss/argon-design-system-react.scss";
 import "./Assets/css/style.css"
+import "./Assets/css/animate.css"
 
 ReactDOM.render(<App />, document.getElementById('root'));
 

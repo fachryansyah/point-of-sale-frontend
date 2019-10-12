@@ -79,7 +79,7 @@ class Login extends Component {
                 <div className="container pt-lg-md">
                     <div className="row justify-content-center">
                         <div className="col-md-5">
-                            <div className="card bg-secondary shadow border-0">
+                            <div className="animated fadeInUp delay-1s card bg-secondary shadow border-0">
                                 <div className="card-header bg-white pb-2">
                                     <div className="text-muted text-center">
                                         <h4>POINTZO</h4>

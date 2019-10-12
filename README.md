@@ -30,7 +30,6 @@ ___
 ___
 
 ### Installation
----
 
 ##### Clone
 
@@ -39,15 +38,12 @@ $ git clone https://github.com/fachryansyah/point-of-sale-frontend
 $ cd point-of-sale-frontend
 ```
 ---
----
-
 ##### Install Depedencies
 
 ```sh
 $ npm install
 ```
 ---
-
 ##### Run server development
 
 ```sh
@@ -58,7 +54,6 @@ $ npm start
 ```sh
 $ npm run build
 ```
-
 ___
 
 ### Dependencies

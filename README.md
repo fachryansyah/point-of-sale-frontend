@@ -6,14 +6,14 @@
 
 ## Table Of Contents
 
-*  [Intro](https://github.com/fachryansyah/point-of-sale-backend#Intro)
-*  [Requirments](https://github.com/fachryansyah/point-of-sale-backend#Requirments)
-*  [Dependencies](https://github.com/fachryansyah/point-of-sale-backend#Dependencies)
-    *  [clone](https://github.com/fachryansyah/point-of-sale-backend#Clone)
-    *  [serve](https://github.com/fachryansyah/point-of-sale-backend#Serve)
-* [Dependencies](https://github.com/fachryansyah/point-of-sale-backend#Dependencies)
-* [Api Docs](https://github.com/fachryansyah/point-of-sale-backend#Api-Docs)
-* [License](https://github.com/fachryansyah/point-of-sale-backend#License)
+*  [Intro](https://github.com/fachryansyah/point-of-sale-frontend#Intro)
+*  [Requirments](https://github.com/fachryansyah/point-of-sale-frontend#Requirments)
+*  [Dependencies](https://github.com/fachryansyah/point-of-sale-frontend#Dependencies)
+    *  [clone](https://github.com/fachryansyah/point-of-sale-frontend#Clone)
+    *  [serve](https://github.com/fachryansyah/point-of-sale-frontend#Serve)
+* [Dependencies](https://github.com/fachryansyah/point-of-sale-frontend#Dependencies)
+* [Api Docs](https://github.com/fachryansyah/point-of-sale-frontend#Api-Docs)
+* [License](https://github.com/fachryansyah/point-of-sale-frontend#License)
 ___
 ### Intro
 

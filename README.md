@@ -12,7 +12,6 @@
     *  [clone](https://github.com/fachryansyah/point-of-sale-frontend#Clone)
     *  [serve](https://github.com/fachryansyah/point-of-sale-frontend#Serve)
 * [Dependencies](https://github.com/fachryansyah/point-of-sale-frontend#Dependencies)
-* [Api Docs](https://github.com/fachryansyah/point-of-sale-frontend#Api-Docs)
 * [License](https://github.com/fachryansyah/point-of-sale-frontend#License)
 ___
 ### Intro

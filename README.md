@@ -1,68 +1,87 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Point of Sales Express
 
-## Available Scripts
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+[![Code](https://camo.githubusercontent.com/65f7d034f575d55d73f27883473847130e1ead2e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436f64652532305374796c652d5374616e646172642d79656c6c6f772e737667)](https://standardjs.com)
 
-In the project directory, you can run:
 
-### `npm start`
+## Table Of Contents
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+*  [Intro](https://github.com/fachryansyah/point-of-sale-backend#Intro)
+*  [Requirments](https://github.com/fachryansyah/point-of-sale-backend#Requirments)
+*  [Dependencies](https://github.com/fachryansyah/point-of-sale-backend#Dependencies)
+    *  [clone](https://github.com/fachryansyah/point-of-sale-backend#Clone)
+    *  [serve](https://github.com/fachryansyah/point-of-sale-backend#Serve)
+* [Dependencies](https://github.com/fachryansyah/point-of-sale-backend#Dependencies)
+* [Api Docs](https://github.com/fachryansyah/point-of-sale-backend#Api-Docs)
+* [License](https://github.com/fachryansyah/point-of-sale-backend#License)
+___
+### Intro
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+This is a simple point of sales web application made with reactjs, Argon ui kit with beautiful design.
 
-### `npm test`
+[Demo](http://pointzoo.zeblogic.com)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+___
 
-### `npm run build`
+### Requirments
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+* [Nodejs](https://nodejs.org/en/) v10 LTS version
+* [Npm](https://www.npmjs.com/get-npm) package / [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable) package
+___
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### Installation
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+##### Clone
 
-### `npm run eject`
+```sh
+$ git clone https://github.com/fachryansyah/point-of-sale-frontend
+$ cd point-of-sale-frontend
+```
+---
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+##### Install Depedencies
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```sh
+$ npm install
+```
+---
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+##### Run server development
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+```sh
+$ npm start
+```
+---
+##### Build For Production
+```sh
+$ npm run build
+```
 
-## Learn More
+___
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Dependencies
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+List of depedencies using in this project
 
-### Code Splitting
+| Plugin | Description |
+| ------ | ------ |
+| [ReactJS](https://reactjs.org) | JavaScript library for building user interfaces |
+| [Axios](https://github.com/axios/axios) | HTTP client for request API |
+| [Bootstrap](https://getbootstrap.com) | CSS Framework |
+| [Chart.js](https://www.chartjs.org) | For Report Statistics |
+| [Moment](https://momentjs.com) | Manipulate time |
+| [Redux](https://redux.js.org) | Global State Management |
+| [Redux Promise Middleware](https://www.npmjs.com/package/redux-promise-middleware) | Promise handler for react redux |
+| [React Shimmer Effect](https://www.npmjs.com/package/react-shimmer-effect) | Create Shimmer Effect when Loading |
+| [React Toastify](https://www.npmjs.com/package/react-toastify) | Show Notify in React App |
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
 
-### Analyzing the Bundle Size
+License
+----
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+MIT
 
-### Making a Progressive Web App
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+**Free Software, Hell Yeah!**

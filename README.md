@@ -3,6 +3,9 @@
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 [![Code](https://camo.githubusercontent.com/65f7d034f575d55d73f27883473847130e1ead2e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436f64652532305374796c652d5374616e646172642d79656c6c6f772e737667)](https://standardjs.com)
 
+![Dashboard](https://i.ibb.co/Bsqm5cG/Screenshot-from-2019-10-19-00-13-33.png)
+![Chart statistics](https://i.ibb.co/C6sFyKG/chart.png)
+
 
 ## Table Of Contents
 
@@ -30,26 +33,31 @@ ___
 
 ### Installation
 
-##### Clone
+##### 1. Clone
+clone the repository
 
 ```sh
 $ git clone https://github.com/fachryansyah/point-of-sale-frontend
 $ cd point-of-sale-frontend
 ```
----
+
 ##### Install Depedencies
+Install requirement depedencies
 
 ```sh
 $ npm install
 ```
----
+
 ##### Run server development
+if you want start on development mode.
 
 ```sh
 $ npm start
 ```
----
+
 ##### Build For Production
+build for production ready, and host ready
+
 ```sh
 $ npm run build
 ```
@@ -78,4 +86,4 @@ License
 MIT
 
 
-**Free Software, Hell Yeah!**
+@2019 - Fahriansyah

@@ -18,8 +18,10 @@
 *  [Requirments](#Requirments)
 *  [Related Projects](#Related-Projects)
 *  [Dependencies](#Dependencies)
-    *  [clone](#Clone)
-    *  [serve](#Serve)
+    *  [Clone Repo](#Clone-Repo)
+    *  [Install Depedencies](#Install-Depedencies)
+    *  [Run server development](#Run-server-development)
+    *  [Build For Production](#Build-For-Production)
 * [Dependencies](#Dependencies)
 * [License](#License)
 ___
@@ -55,7 +57,7 @@ ___
 
 ### Installation
 
-##### 1. Clone
+##### 1. Clone Repo
 clone the repository
 
 ```sh

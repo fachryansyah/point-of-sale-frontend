@@ -14,13 +14,13 @@
 
 ## Table Of Contents
 
-*  [Intro](https://github.com/fachryansyah/point-of-sale-frontend#Intro)
-*  [Requirments](https://github.com/fachryansyah/point-of-sale-frontend#Requirments)
-*  [Dependencies](https://github.com/fachryansyah/point-of-sale-frontend#Dependencies)
-    *  [clone](https://github.com/fachryansyah/point-of-sale-frontend#Clone)
-    *  [serve](https://github.com/fachryansyah/point-of-sale-frontend#Serve)
-* [Dependencies](https://github.com/fachryansyah/point-of-sale-frontend#Dependencies)
-* [License](https://github.com/fachryansyah/point-of-sale-frontend#License)
+*  [Intro](#Intro)
+*  [Requirments](#Requirments)
+*  [Dependencies](#Dependencies)
+    *  [clone](#Clone)
+    *  [serve](#Serve)
+* [Dependencies](#Dependencies)
+* [License](#License)
 ___
 ### Intro
 

@@ -30,7 +30,16 @@ This is a simple point of sales web application made with reactjs, Argon ui kit 
 [Demo](http://pointzoo.zeblogic.com)
 
 ___
-
+### Features
+- [x] Manage Product (CRUD)
+- [x] Chart statistics of Revenue
+- [x] Fancy UI Design
+- [x] Smooth animation UI
+- [x] Simple Add to cart
+- [x] Order product
+- [x] History of order
+- [x] Authentication with JWT
+___
 ### Requirments
 
 * [Nodejs](https://nodejs.org/en/) v10 LTS version

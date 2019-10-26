@@ -20,6 +20,7 @@
 *  [Dependencies](#Dependencies)
     *  [Clone Repo](#Clone-Repo)
     *  [Install Depedencies](#Install-Depedencies)
+    *  [Setup Environment](#Setup-Environment)
     *  [Run server development](#Run-server-development)
     *  [Build For Production](#Build-For-Production)
 * [Dependencies](#Dependencies)
@@ -70,6 +71,13 @@ Install requirement depedencies
 
 ```sh
 $ npm install
+```
+
+##### Setup Environment
+Before start server development or build for production, you should create new .env file, edit BASE_URL_API variable to backend server. you can found the backend server here.. [https://github.com/fachryansyah/point-of-sale-backend](https://github.com/fachryansyah/point-of-sale-backend)
+
+```sh
+BASE_URL_API=<Backend-api-url>
 ```
 
 ##### Run server development

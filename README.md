@@ -3,9 +3,14 @@
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 [![Code](https://camo.githubusercontent.com/65f7d034f575d55d73f27883473847130e1ead2e/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f436f64652532305374796c652d5374616e646172642d79656c6c6f772e737667)](https://standardjs.com)
 
-![Dashboard](https://i.ibb.co/Bsqm5cG/Screenshot-from-2019-10-19-00-13-33.png)
-![Chart statistics](https://i.ibb.co/C6sFyKG/chart.png)
 
+<p align="center">
+    <img title="dashboard" src="https://i.ibb.co/Bsqm5cG/Screenshot-from-2019-10-19-00-13-33.png" />
+</p>
+
+<p align="center">
+    <img title="dashboard" src="https://i.ibb.co/Kw8N3qH/chart-new.png" />
+</p>
 
 ## Table Of Contents
 
@@ -29,6 +34,13 @@ ___
 
 * [Nodejs](https://nodejs.org/en/) v10 LTS version
 * [Npm](https://www.npmjs.com/get-npm) package / [Yarn](https://yarnpkg.com/lang/en/docs/install/#mac-stable) package
+___
+
+### Related Projects
+This project is related to several platforms
+
+* Backend [https://github.com/fachryansyah/point-of-sale-backend](https://github.com/fachryansyah/point-of-sale-backend)
+* Android App [https://github.com/fachryansyah/point-of-sale-mobile](https://github.com/fachryansyah/point-of-sale-mobile)
 ___
 
 ### Installation

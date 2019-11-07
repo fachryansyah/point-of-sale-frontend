@@ -109,7 +109,7 @@ class CartView extends Component {
             this.props.cart.cartList.map((val, key) => {
                 element.push(
                     <li className="list-group-item no-border d-flex flex-row" key={key}>
-                        <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
+                        <img src={val.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
                         <div className="ml-2">
                             <h6>{ val.name }</h6>
                             <p><span className="badge badge-primary">{ val.qty }</span></p>

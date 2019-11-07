@@ -138,7 +138,7 @@ class History extends Component {
             this.state.orderDetail.items.map((val, key) => {
                 element.push(
                     <li className="list-group-item bg-deep-white no-border d-flex flex-row" key={key}>
-                        <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.product.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
+                        <img src={val.product.image} style={{ width: "100px", height: "70px" }} alt="Product Image" />
                         <div className="ml-2">
                             <h6>{ val.product.name }</h6>
                             <p><span className="badge badge-primary">{ val.qty }</span></p>

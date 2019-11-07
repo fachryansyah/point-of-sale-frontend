@@ -38,7 +38,7 @@ class UpdateProduct extends Component {
                 id: res.data.data.id,
                 name: res.data.data.name,
                 description: res.data.data.description,
-                imagePreview: `${process.env.REACT_APP_BASE_URL}/images/${res.data.data.image}`,
+                imagePreview: res.data.data.image,
                 qty: res.data.data.qty,
                 category_id: res.data.data.category_id,
                 price: res.data.data.price,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Http from '../Http'
+import Moment from 'moment-timezone'
 import { Link } from 'react-router-dom'
 import Rupiah from 'rupiah-format'
 import { Line } from 'react-chartjs-2'
@@ -21,9 +22,9 @@ class Statistic extends Component {
             currentData:[],
             lastData: [],
             chartLable: [],
-            chartMode: 'Weekly',
+            chartMode: 'Week',
             recentOrders: [],
-            recentOrderMode: 'Weekly'
+            recentOrderMode: 'Week'
         }
     }
 
@@ -75,7 +76,7 @@ class Statistic extends Component {
     async getChartWeekly() {
 
         await this.setState({
-            chartMode: 'Weekly',
+            chartMode: 'Week',
             currentData: [0, 0, 0, 0, 0, 0, 0],
             lastData: [0, 0, 0, 0, 0, 0, 0],
             chartLable: ['Monday', 'Thuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -118,7 +119,7 @@ class Statistic extends Component {
 
     async getChartMonthly(){
         this.setState({
-            chartMode: 'Monthly',
+            chartMode: 'Month',
             currentData: [0, 0, 0, 0],
             lastData: [0, 0, 0, 0],
             chartLable: ['Week 1', 'Week 2', 'Week 3', 'Week 4']
@@ -161,7 +162,7 @@ class Statistic extends Component {
 
     async getChartYearly(){
         this.setState({
-            chartMode: 'Yearly',
+            chartMode: 'Year',
             currentData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             lastData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             chartLable: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
@@ -207,17 +208,17 @@ class Statistic extends Component {
         switch (mode) {
             case 'weekly':
                 this.setState({
-                    recentOrderMode: 'Weekly'
+                    recentOrderMode: 'Week'
                 })
                 break;
             case 'monthly':
                 this.setState({
-                    recentOrderMode: 'Monthly'
+                    recentOrderMode: 'Month'
                 })
                 break;
             case 'yearly':
                 this.setState({
-                    recentOrderMode: 'Yearly'
+                    recentOrderMode: 'Year'
                 })
                 break;
             default:
@@ -427,7 +428,7 @@ class Statistic extends Component {
                                                                         </div>
                                                                     </div>
                                                                 </th>
-                                                                <td>{val.created_at}</td>
+                                                                <td>{Moment.tz(val.created_at, 'Asia/Jakarta').format('MMMM Do YYYY')}</td>
                                                                 <td>
                                                                     {
                                                                         val.order_item.map((valItem, keyItem) => {

@@ -320,6 +320,18 @@ footer {
 .delay-mili-5s{
     animation-delay: 1s;
 }
+.delay-mili-6s{
+    animation-delay: 1.2s;
+}
+.delay-mili-7s{
+    animation-delay: 1.4s;
+}
+.delay-mili-8s{
+    animation-delay: 1.6s;
+}
+.delay-mili-9s{
+    animation-delay: 1.8s;
+}
 
 @keyframes lds-ripple {
   0% {

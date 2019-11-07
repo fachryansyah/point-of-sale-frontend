@@ -84,7 +84,7 @@ class ManageProduct extends Component {
                         <th scope="row">{ key+1 }</th>
                         <td>{ val.name }</td>
                         <td>
-                            <img className="img-table" src={`${process.env.REACT_APP_BASE_URL}/images/${val.image}`} alt="product image" />
+                            <img className="img-table" src={val.image} alt="product image" />
                         </td>
                         <td>{ val.category }</td>
                         <td>

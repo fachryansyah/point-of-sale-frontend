@@ -104,7 +104,7 @@ class Dashboard extends Component {
                 element.push(
                     <div className={`animated fadeInUp delay-mili-${key}s col-md-3 mt-5`} key={val.id}>
                         <div className="card custom-shadow" style={{marginTop: "76px"}}>
-                            <img src={`${process.env.REACT_APP_BASE_URL}/images/` + val.image} className="img-product" alt="Product Image" />
+                            <img src={val.image} className="img-product" alt="Product Image" />
                             <div className="card-body custom-card-body">
                                 <h5 className="card-title">{ val.name }</h5>
                                 <h5>
